@@ -1,4 +1,4 @@
-export default class SignUp extends React.Component {
+export default class Carousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,4 +13,4 @@ export default class SignUp extends React.Component {
   }
 }
 
-//export default SignUp;
+//export default Carousel;

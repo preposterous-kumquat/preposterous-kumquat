@@ -1,4 +1,4 @@
-class App extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,4 +17,20 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+// ReactDOM.render(<App />, document.getElementById('app'));
+
+ReactDOM.render((
+  <Router>
+    <Route path="/" component={MainLayout}>
+        <Route path="home" component={Home} />
+        <Route path="upload" component={Upload} />
+        <Route path="carousel" component={Carousel} />
+        <Route path="signup" component={SignUp} />
+        <Route path="signin" component={SignIn} />
+    </Route>
+  </Router>
+), document.getElementById('app'));
+
+
+
+
