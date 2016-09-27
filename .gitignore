@@ -35,5 +35,5 @@ api-key.js
 node_modules/
 
 # DB files
-models/config/config.json
+db/migrations/config/config.json
 
