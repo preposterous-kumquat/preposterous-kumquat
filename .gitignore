@@ -31,6 +31,9 @@ bower_components/
 
 # Secret Keys
 api-key.js
-=======
+
 node_modules/
+
+# DB files
+db/migrations/config/config.json
 
