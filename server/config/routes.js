@@ -1,13 +1,10 @@
 const helpers = require('./helpers.js');
-const multer  = require('multer')
-const storage = multer.memoryStorage();
-const upload = multer({storage: storage, limits: {fileSize: 500000}});
 
 module.exports = (app, express) => {
   app.use(express.static(__dirname + '/../../client'));
 
   app.get('/test', (req, res) => {
-    helpers.testPost(req, res);
+    helpers.test(req, res);
   });
 
 
@@ -37,7 +34,7 @@ module.exports = (app, express) => {
   });
 
 // ADD PHOTO
-  app.post('/upload', helpers.requireLogin, upload.single('photo'), (req, res) => {
+  app.post('/upload', helpers.requireLogin, (req, res) => {
     helpers.upload(req, res);
   })
 };
