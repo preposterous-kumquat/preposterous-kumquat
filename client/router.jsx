@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 
 // Layouts
 import MainLayout from './components/layouts/mainlayout.jsx';
@@ -15,8 +15,8 @@ import SigninContainer from './components/containers/signinContainer.jsx';
 
 //TODO: fix routes
 
-export default (
-  <Router history={browserHistory}>
+export default () => (
+  <Router history={hashHistory}>
     <Route path="/" component={MainContainer}>
       <Route path="home" component={HomeContainer} />
       <Route path="upload" component={UploadContainer} />

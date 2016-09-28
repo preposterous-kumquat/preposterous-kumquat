@@ -15,10 +15,17 @@ class MainContainer extends React.Component {
   //   userApi.getUsers();
   //   store.dispatch(loadSearchLayout('users', 'User Results'));
   // }
+  // render() {
+  //   return (
+  //     <div>
+  //       {this.props.hasAuth ? <MainLayout /> : <LandingLayout />}
+  //     </div>
+  //   );
+  // }
   render() {
     return (
       <div>
-        {this.props.hasAuth ? <MainLayout /> : <LandingLayout />}
+        <MainLayout { ...this.props } />
       </div>
     );
   }

@@ -69,8 +69,13 @@
 	_reactDom2.default.render(_react2.default.createElement(
 	  _reactRedux.Provider,
 	  { store: _store2.default },
-	  _router2.default
+	  _react2.default.createElement(_router2.default, null)
 	), document.getElementById('app'));
+
+	// ReactDOM.render(
+	//   <div>abcd</div>,
+	//   document.getElementById('app')
+	// );
 
 /***/ },
 /* 1 */
@@ -23086,19 +23091,21 @@
 
 
 	// Layouts
-	exports.default = _react2.default.createElement(
-	  _reactRouter.Router,
-	  { history: _reactRouter.browserHistory },
-	  _react2.default.createElement(
-	    _reactRouter.Route,
-	    { path: '/', component: _main2.default },
-	    _react2.default.createElement(_reactRouter.Route, { path: 'home', component: _homeContainer2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'upload', component: _uploadContainer2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'carousel', component: _carouselContainer2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'signin', component: _signinContainer2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signupContainer2.default })
-	  )
-	);
+	exports.default = function () {
+	  return _react2.default.createElement(
+	    _reactRouter.Router,
+	    { history: _reactRouter.hashHistory },
+	    _react2.default.createElement(
+	      _reactRouter.Route,
+	      { path: '/', component: _main2.default },
+	      _react2.default.createElement(_reactRouter.Route, { path: 'home', component: _homeContainer2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: 'upload', component: _uploadContainer2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: 'carousel', component: _carouselContainer2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: 'signin', component: _signinContainer2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signupContainer2.default })
+	    )
+	  );
+	};
 	// export default (
 	//   <Router history={browserHistory}>
 	//     <Route path="/" component={MainContainer}>
@@ -28664,6 +28671,14 @@
 	  value: true
 	});
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(196);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	exports.default = function (props) {
 	  return _react2.default.createElement(
 	    'div',
@@ -28717,13 +28732,39 @@
 	  );
 	};
 
-	var _react = __webpack_require__(1);
+	// export default class MainLayout extends React.Component {
+	//   render() {
+	//     return (
+	// 			<div>
+	// 				<div className='navBar'>
+	//           <ul>
+	//             <li>
+	//               <Link to='/home'>HOME</Link>
+	//             </li>
+	//             <li>
+	//               <Link to='/upload'>UPLOAD PHOTO</Link>
+	//             </li>
+	//             <li>
+	//               <Link to='/signin'>SIGN OUT</Link>
+	//             </li>
+	//           </ul>
+	// 				</div>
+	// 			</div>
+	// 		);
+	//   }
+	// }
 
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(196);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	// ReactDOM.render((
+	//   <Router>
+	//     <Route path="/" component={MainLayout}>
+	//         <Route path="home" component={Home} />
+	//         <Route path="upload" component={Upload} />
+	//         <Route path="carousel" component={Carousel} />
+	//         <Route path="signup" component={SignUp} />
+	//         <Route path="signin" component={SignIn} />
+	//     </Route>
+	//   </Router>
+	// ), document.getElementById('app'));
 
 /***/ },
 /* 258 */
@@ -28835,6 +28876,13 @@
 	  //   userApi.getUsers();
 	  //   store.dispatch(loadSearchLayout('users', 'User Results'));
 	  // }
+	  // render() {
+	  //   return (
+	  //     <div>
+	  //       {this.props.hasAuth ? <MainLayout /> : <LandingLayout />}
+	  //     </div>
+	  //   );
+	  // }
 
 
 	  _createClass(MainContainer, [{
@@ -28843,7 +28891,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        this.props.hasAuth ? _react2.default.createElement(_mainlayout2.default, null) : _react2.default.createElement(_landinglayout2.default, null)
+	        _react2.default.createElement(_mainlayout2.default, this.props)
 	      );
 	    }
 	  }]);
@@ -28922,14 +28970,17 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var reducer = function reducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? { text: '' } : arguments[0];
 	  var action = arguments[1];
 
 	  switch (action.type) {
 	    case 'UPDATE_TEXT':
-	      // return { ...state, text: action.text }
-	      return Object.assign({}, state, { text: action.text });
+	      return _extends({}, state, { text: action.text });
+	    // return Object.assign({}, state, {text: action.text});
 	    default:
 	      return state;
 	  }
