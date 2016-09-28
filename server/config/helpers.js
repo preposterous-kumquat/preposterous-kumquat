@@ -139,6 +139,12 @@ module.exports = {
     let userID = req.session.user.id;
     let userLoc = req.session.user.default_loc;
     form.parse(req);
+  },
+  photos: (req, res) => {
+
+  },
+  stack: (req, res) => {
+
   }
-}
+};
 

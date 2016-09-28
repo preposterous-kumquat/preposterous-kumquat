@@ -14,7 +14,6 @@ module.exports = (app, express) => {
   })
 // CHECK SESSION
   app.get('/checkauth', helpers.requireLogin, (req, res) => {
-    console.log(req.session, 'this session')
     res.send(200);
   });
 
@@ -36,5 +35,15 @@ module.exports = (app, express) => {
 // ADD PHOTO
   app.post('/upload', helpers.requireLogin, (req, res) => {
     helpers.upload(req, res);
-  })
+  });
+
+// GET THUMBNAILS
+  app.get('/photos', helpers.requireLogin, (req, res) => {
+    helpers.photos(req, res);
+  });
+
+// GET STACK
+  app.get('/stack', helpers.requireLogin, (req, res) => {
+    helpers.stack(req, res);
+  });
 };
