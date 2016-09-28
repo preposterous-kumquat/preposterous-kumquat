@@ -77,7 +77,8 @@ module.exports = {
   },
   upload: (req, res) => {
     console.log(req.session.user, 'reasafsdfa');
-    let data = req.body;
+    let data = req;
+    data.theme = "icecream"
     let userID = req.session.user.id;
     let userLoc = req.session.user.default_loc;
     
