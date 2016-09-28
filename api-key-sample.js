@@ -6,5 +6,6 @@ module.exports = {
   sequelize: {
     username: your_username,
     password: your_password
-  }
+  },
+  secret: secret_string,
 }
