@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Photos.belongsTo(models.Users);
-        Photos.hasOne(models.Themes);
+        Photos.belongsTo(models.Themes);
         Photos.hasMany(models.Keywords);     
       }
     }

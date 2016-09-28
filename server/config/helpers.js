@@ -1,5 +1,7 @@
 const models = require('../../db/index');
 const bcrypt = require('bcrypt-nodejs');
+const request = require('request');
+
 
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
@@ -71,6 +73,43 @@ module.exports = {
   logout: (req, res) => {
     req.session.destroy(() => {
       res.redirect('/')
+    });
+  },
+  upload: (req, res) => {
+    console.log(req.session.user, 'reasafsdfa');
+    let data = req.body;
+    let userID = req.session.user.id;
+    let userLoc = req.session.user.default_loc;
+    
+    models.Themes.findOne({where: {theme: data.theme}})
+    .then( (theme) => {
+      if (!theme) {
+// DELETE ERROR HANDLING ONCE THEME TABLE IS POPULATED ON INSTANTIATION W/ LIMITED LIST
+        console.log('THEME DOES NOT EXIST IN DB!!');
+        models.Themes.create({
+          theme: data.theme
+        });
+      } else {
+        models.Photos.create({
+          UserId: userID,
+          ThemeId: theme.dataValues.id,
+          geohash: userLoc,
+        })
+        .then( (photo) => {
+          let formData = {
+            photo: new Buffer(req.file.buffer),
+            id: photo.dataValues.id
+          };
+          request.post({url: 'PHOTOSERVICEENDPOINTHERE', formData: formData}, (err, body) => {
+            if (err) {
+              console.log('Error posting photo to file server!', err);
+              res.send(500);
+            }
+            console.log('Photo successfully posted to file server!');
+            res.send(201);
+          });
+        });
+      }
     });
   }
 }
