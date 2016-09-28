@@ -4,14 +4,9 @@ const bcrypt = require('bcrypt-nodejs');
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
 module.exports = {
-  testPost: (req, res) => {
-    console.log(req.session, 'test');
-    res.send();
-  },
   requireLogin: (req, res, next) => {
     console.log(req.session, 'my sid');
     if (!isLoggedIn(req)) {
-      // REJECT IF NOT LOGGED IN
       res.send(401);
     } else {
       next();
@@ -72,6 +67,11 @@ module.exports = {
         console.log('error on login', err);
         res.send(500);
       })
+  },
+  logout: (req, res) => {
+    req.session.destroy(() => {
+      res.redirect('/')
+    });
   }
 }
 

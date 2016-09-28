@@ -8,6 +8,10 @@ module.exports = (app, express) => {
   });
 
 
+// STATIC LANDING PAGE
+  app.get('/', (req, res) => {
+    res.render();
+  })
 // CHECK SESSION
   app.get('/checkauth', helpers.requireLogin, (req, res) => {
     console.log(req.session, 'this session')
@@ -22,5 +26,10 @@ module.exports = (app, express) => {
 // LOGIN
   app.post('/login', (req, res) => {
     helpers.login(req, res);
+  });
+
+// LOGOUT
+  app.get('/logout', (req, res) => {
+    helpers.logout(req, res);
   });
 };
