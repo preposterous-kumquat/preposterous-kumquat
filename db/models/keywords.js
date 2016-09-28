@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Keywords.belongsTo(models.Photos);
+        Keywords.belongsToMany(models.Photos, {through: 'PhotosKeywords'});
       }
     }
   });
