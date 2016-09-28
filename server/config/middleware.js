@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const multer = require('multer');
 const db = require('../../db/index.js')
 const secret = require('../../api-key.js')
 

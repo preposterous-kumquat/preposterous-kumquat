@@ -4,7 +4,7 @@ module.exports = (app, express) => {
   app.use(express.static(__dirname + '/../../client'));
 
   app.get('/test', (req, res) => {
-    helpers.testPost(req, res);
+    helpers.test(req, res);
   });
 
 
@@ -32,4 +32,9 @@ module.exports = (app, express) => {
   app.get('/logout', (req, res) => {
     helpers.logout(req, res);
   });
+
+// ADD PHOTO
+  app.post('/upload', helpers.requireLogin, (req, res) => {
+    helpers.upload(req, res);
+  })
 };

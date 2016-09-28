@@ -1,5 +1,8 @@
 const models = require('../../db/index');
 const bcrypt = require('bcrypt-nodejs');
+const request = require('request');
+const multiparty = require('multiparty');
+const FormData = require('form-data');
 
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
@@ -72,6 +75,70 @@ module.exports = {
     req.session.destroy(() => {
       res.redirect('/')
     });
+  },
+  upload: (req, res) => {
+    let form = new multiparty.Form();
+    form.on('error', (err) => console.log('error parsing upload:', err));
+
+    form.on('part', (part) => {
+      if (part.filename) {
+        formData.append('photo', part, {
+          filename: part.filename, 
+          contentType: part["content-type"]
+        });
+        part.resume();
+      }
+      part.on('error', (err) => console.log('part error', err));
+    });
+
+    form.on('field', (field, value) => {
+      models.Themes.findOne({where: {theme: value}})
+      .then( (theme) => {
+        if (!theme) {
+  // DELETE ERROR HANDLING ONCE THEME TABLE IS POPULATED ON INSTANTIATION W/ LIMITED LIST
+          console.log('THEME DOES NOT EXIST IN DB!!');
+          models.Themes.create({
+            theme: value
+          });
+        } else {
+          models.Photos.create({
+            UserId: userID,
+            ThemeId: theme.dataValues.id,
+            geohash: userLoc,
+          })
+          .then( (photo) => {
+            data.id = photo.dataValues.id;
+          });
+        }
+      });
+    });
+
+    form.on('close', () => {
+      console.log('posting data to photo service')
+
+      let headers = {
+       "headers": {
+          'content-type': 'multipart/form-data',
+          "transfer-encoding": "chunked"
+        } 
+      };
+
+      let r = request.post("http://requestb.in/1k8pwr51", headers, (err, response, body) => { 
+        if (err) {
+          console.log('error posting to photo service', err);
+        } else {
+          console.log('photo posted!');
+          res.send(response);
+        }
+      });
+      r._form = formData;
+    });
+
+    let data = {};
+    let formData = new FormData();
+    let userID = req.session.user.id;
+    let userLoc = req.session.user.default_loc;
+    form.parse(req);
   }
 }
 
