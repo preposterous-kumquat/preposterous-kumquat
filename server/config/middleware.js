@@ -12,14 +12,14 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 module.exports = (app, express) => {
   app.use(morgan('dev'));
-  app.use(cookieParser());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
+  app.use(cookieParser(secret.secret));
   app.use(session({
     secret: secret.secret,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { secure: false },
     store: new SequelizeStore({
       db: db.sequelize
     }),

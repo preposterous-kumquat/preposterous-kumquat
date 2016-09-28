@@ -4,19 +4,12 @@ const bcrypt = require('bcrypt-nodejs');
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
 module.exports = {
-  testPost: (data, res) => {
-    models.Users.create({
-      username: data.username,
-      password: data.password,
-      default_loc: data.default_loc
-    }).then( (user) => {
-      console.log('user created at /TEST')
-      res.send();
-    }).catch( (err) => {
-      console.log('error on test', err);
-    })
+  testPost: (req, res) => {
+    console.log(req.session, 'test');
+    res.send();
   },
   requireLogin: (req, res, next) => {
+    console.log(req.session, 'my sid');
     if (!isLoggedIn(req)) {
       // REJECT IF NOT LOGGED IN
       res.send(401);
@@ -25,9 +18,9 @@ module.exports = {
     }
   },
   createSession: (req, res, newUser) => {
-    return req.session.regenerate( () => {
+    req.session.regenerate( () => {
       req.session.user = newUser;
-      res.send(200);
+      res.send();
     });
   },
   signup: (req, res) => {
@@ -50,13 +43,35 @@ module.exports = {
           })
         } else {
           console.log('Account Already Exists');
-          res.send(400, {error: "User Account already exists"});
+          res.send(400, {error: 'User Account already exists'});
         }
       })
       .catch( (err) => {
         console.log('error on signup', err);
         res.send(500);
       });
+  },
+  login: (req, res) => {
+    let data = req.body;
+    models.Users.findOne({where: {username: data.username}})
+      .then( (user) => {
+        if (!user) {
+          console.log('invalid username');
+          res.send(400, {error: 'User Account does not exist'});
+        } else {
+          if (bcrypt.compareSync(data.password, user.dataValues.password)) {
+            console.log('user login successful');
+            module.exports.createSession(req, res, user);
+          } else {
+            console.log('invalid password');
+            res.send(401);
+          }
+        }
+      })
+      .catch( (err) => {
+        console.log('error on login', err);
+        res.send(500);
+      })
   }
 }
 
