@@ -1,9 +1,11 @@
+const port = process.env.NODE_ENV === 'PROD' ? require('./config.js').PROD : require('./config.js').DEV;
 const models = require('../../db/index');
 const bcrypt = require('bcrypt-nodejs');
 const request = require('request');
 const multiparty = require('multiparty');
 const FormData = require('form-data');
 const geohash = require('ngeohash');
+const http = require('http');
 
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
@@ -82,96 +84,67 @@ module.exports = {
     });
   },
   upload: (req, res) => {
-    let form = new multiparty.Form();
-    form.on('error', (err) => console.log('error parsing upload:', err));
-
-    form.on('part', (part) => {
-      if (part.filename) {
-        formData.append('photo', part, {
-          filename: part.filename, 
-          contentType: part["content-type"]
-        });
-        part.resume();
-      }
-      part.on('error', (err) => console.log('part error', err));
-    });
-
-    form.on('field', (field, value) => {
-      models.Themes.findOne({where: {theme: value}})
-      .then( (theme) => {
-        if (!theme) {
-  // DELETE ERROR HANDLING ONCE THEME TABLE IS POPULATED ON INSTANTIATION W/ LIMITED LIST
-          console.log('THEME DOES NOT EXIST IN DB!!');
-          models.Themes.create({
-            theme: value
-          });
-        } else {
-          models.Photos.create({
-            UserId: userID,
-            ThemeId: theme.dataValues.id,
-            geohash: userLoc,
-          })
-          .then( (photo) => {
-            data.id = photo.dataValues.id;
-          });
-        }
-      });
-    });
-
-    form.on('close', () => {
-      console.log('posting data to photo service');
-      let headers = {
-       "headers": {
-          'content-type': 'multipart/form-data',
-          "transfer-encoding": "chunked"
-        }
-      };
-
-      // request.post('http://localhost:3001/test', headers, (err, response, body) => {
-      //   if (err) {console.log(err)}
-      //   console.log('response', response, 'body', body);
-      // })
-
-      // let r = request.post("http://requestb.in/1k8pwr51", headers, (err, response, body) => { 
-      // let r = request.post("http://localhost:3001/test", headers, (err, response, body) => { 
-      let r = request.post("http://localhost:3001/photoProcessor/upload", (err, response, body) => { 
-        if (err) {
-          console.log('error posting to photo service', err);
-        } else {
-          console.log('photo posted!');
-          models.Photos.findOne({where: {id: data.id}})
-          .then( (photo) => {
-            if (!photo) {
-              console.log('error querying DB');
-            } else {
-              body.geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
-              sendToCurator(body);
-              photo.update({
-                geohash: body.geohash,
-                file_url: body.path,
-              })
-              .then( () => {
-                console.log('updated photo')
-              })
-            }
-          })
-          res.send(response);
-        }
-      });
-      r._form = formData;
-    });
-
-    let data = {};
-    let formData = new FormData();
     let userID = req.session.user.id;
     let userLoc = req.session.user.default_loc;
-    form.parse(req);
+
+    models.Photos.create({
+      UserId: userID,
+      geohash: userLoc,
+      file_url: 'dummy url'
+    })
+    .then( (photo) => {
+      let photoId = photo.dataValues.id;
+      /************************ NEED TO FIX FOR DEV *********************************/
+      req.pipe(request(`http://localhost:3001/photoProcessor/upload/${photoId}`)).pipe(res);
+    });
   },
   photos: (req, res) => {
 
   },
   stack: (req, res) => {
 
+  },
+  savedPhoto: (req, res) => {
+    let body = req.body;
+    models.Photos.findOne({where: {id: body.id}})
+      .then( (photo) => {
+        body.geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
+        sendToCurator(body);
+        return photo;
+      })
+      .then((photo) => {
+        models.Themes.findOrCreate({where: {theme: body.theme}})
+          .then((theme) => {
+            photo.update({
+              geohash: body.geohash,
+              file_url: body.url,
+              ThemeId: theme[0].dataValues.id
+            });
+          });
+        return photo;
+      })
+      .then((photo) => {
+        // console.log('UPDATE RESULT', result);
+        let keywordsPK = [];
+        body.clarifaiKeywords.forEach((keyword) => {
+          models.Keywords.findOrCreate({where: {keyword: keyword}})
+            .then((keyword) => {
+              keywordsPK.push(keyword[0].dataValues.id);
+            })
+            .then(() => {
+              return photo.addKeywords(keywordsPK);
+            })
+            .catch((err) => {
+              console.log('ERROR: ', err);
+            });
+        });
+      })
+      .then(() => {
+        res.send('successfully saved photo');
+      })
+      .catch((err) => {
+        console.log('ERROR: ', err);
+      });
   }
 };
 
