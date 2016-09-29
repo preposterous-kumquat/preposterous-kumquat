@@ -36,6 +36,9 @@ module.exports = (app, express) => {
   app.post('/upload', helpers.requireLogin, (req, res) => {
     helpers.upload(req, res);
   });
+  app.post('/savedPhoto', (req, res) => {
+    helpers.savedPhoto(req, res);
+  });
 
 // GET THUMBNAILS
   app.get('/photos', helpers.requireLogin, (req, res) => {
