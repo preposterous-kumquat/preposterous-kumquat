@@ -7,6 +7,10 @@ const geohash = require('ngeohash');
 
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
+let sendToCurator = (data) => {
+
+}
+
 module.exports = {
   requireLogin: (req, res, next) => {
     console.log(req.session, 'my sid');
@@ -128,16 +132,19 @@ module.exports = {
           console.log('error posting to photo service', err);
         } else {
           console.log('photo posted!');
-          models.Photos.findOne({where: {id: body.id}})
+          models.Photos.findOne({where: {id: data.id}})
           .then( (photo) => {
             if (!photo) {
               console.log('error querying DB');
             } else {
-              let geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
+              body.geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
+              sendToCurator(body);
               photo.update({
-                geohash: geohash,
+                geohash: body.geohash,
                 file_url: body.path,
-                
+              })
+              .then( () => {
+                console.log('updated photo')
               })
             }
           })
