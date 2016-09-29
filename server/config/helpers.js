@@ -1,5 +1,6 @@
 const port = process.env.NODE_ENV === 'PROD' ? require('./config.js').PROD : require('./config.js').DEV;
 const models = require('../../db/index');
+const workers = require('./workers');
 const bcrypt = require('bcrypt-nodejs');
 const request = require('request');
 const multiparty = require('multiparty');
@@ -15,7 +16,6 @@ let sendToCurator = (data) => {
 
 module.exports = {
   requireLogin: (req, res, next) => {
-    console.log(req.session, 'my sid');
     if (!isLoggedIn(req)) {
       res.send(401);
     } else {
@@ -30,17 +30,18 @@ module.exports = {
   },
   signup: (req, res) => {
     let data = req.body;
-    models.Users.findOne({where: {username: data.username}})
+    models.Users.findOne({where: {email: data.email}})
       .then( (user) => {
         if (!user) {
-          bcrypt.hash(data.password, null, null, (err, hash) => {
+          bcrypt.hash(data.pw, null, null, (err, hash) => {
             if (err) {
               console.log('hashing error', err);
             }
             models.Users.create({
-              username: data.username,
+              email: data.email,
+              full_name: data.name,
               password: hash,
-              default_loc: data.default_loc
+              default_loc: data.loc
             }).then( (newUser) => {
               console.log('user created successfully');
               module.exports.createSession(req, res, newUser);
@@ -58,13 +59,14 @@ module.exports = {
   },
   login: (req, res) => {
     let data = req.body;
-    models.Users.findOne({where: {username: data.username}})
+    models.Users.findOne({where: {email: data.email}})
       .then( (user) => {
+        console.log(user, 'asdfasdf')
         if (!user) {
           console.log('invalid username');
           res.send(400, {error: 'User Account does not exist'});
         } else {
-          if (bcrypt.compareSync(data.password, user.dataValues.password)) {
+          if (bcrypt.compareSync(data.pw, user.dataValues.password)) {
             console.log('user login successful');
             module.exports.createSession(req, res, user);
           } else {
@@ -83,6 +85,12 @@ module.exports = {
       res.redirect('/')
     });
   },
+  user: (req, res) => {
+    user = req.session.user;
+    delete user.password
+    console.log(req.session.user);
+    res.send(user);
+  },
   upload: (req, res) => {
     let userID = req.session.user.id;
     let userLoc = req.session.user.default_loc;
@@ -99,7 +107,19 @@ module.exports = {
     });
   },
   photos: (req, res) => {
-
+    let userID = req.session.user.id;
+    
+    models.Photos.findAll({ 
+      where: {
+        UserId: userID
+      },
+      limit: 6,
+      order: 'createdAt DESC'
+    })
+    .then( (photos) => {
+      res.send(photos);
+      workers.prepStacks(photos);
+    });
   },
   stack: (req, res) => {
 

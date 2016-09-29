@@ -49,4 +49,9 @@ module.exports = (app, express) => {
   app.get('/stack', helpers.requireLogin, (req, res) => {
     helpers.stack(req, res);
   });
+
+// GET USER DEETS
+  app.get('/user/details', helpers.requireLogin, (req, res) => {
+    helpers.user(req, res);
+  });
 };

@@ -15,7 +15,7 @@ module.exports = (app, express) => {
   app.use(cookieParser(secret.secret));
   app.use(session({
     secret: secret.secret,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
     store: new SequelizeStore({
