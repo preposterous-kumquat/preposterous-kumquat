@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Truong-Julie/preposterous-kumquat#readme",
   "dependencies": {
+    "axios": "^0.14.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "express-session": "^1.14.1",

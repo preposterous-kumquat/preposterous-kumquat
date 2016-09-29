@@ -21,14 +21,23 @@ class MainContainer extends React.Component {
   //       {this.props.hasAuth ? <MainLayout /> : <LandingLayout />}
   //     </div>
   //   );
-  // }
+
   render() {
     return (
       <div>
-        <MainLayout { ...this.props } />
+        <LandingLayout { ...this.props } />
       </div>
     );
   }
+
+  // // }
+  // render() {
+  //   return (
+  //     <div>
+  //       <MainLayout { ...this.props } />
+  //     </div>
+  //   );
+  // }
 
 }
 
