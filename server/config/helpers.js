@@ -16,7 +16,6 @@ let sendToCurator = (data) => {
 
 module.exports = {
   requireLogin: (req, res, next) => {
-    console.log(req.session, 'my sid');
     if (!isLoggedIn(req)) {
       res.send(401);
     } else {
@@ -25,18 +24,13 @@ module.exports = {
   },
   createSession: (req, res, newUser) => {
     req.session.regenerate( () => {
-      console.log(newUser)
       req.session.user = newUser;
-      let userData = {
-        username: newUser.username,
-        default_loc: newUser.default_loc
-      }
-      res.send(JSON.stringify(userData));
+      res.send();
     });
   },
   signup: (req, res) => {
     let data = req.body;
-    models.Users.findOne({where: {username: data.username}})
+    models.Users.findOne({where: {email: data.email}})
       .then( (user) => {
         if (!user) {
           bcrypt.hash(data.pw, null, null, (err, hash) => {
@@ -45,7 +39,7 @@ module.exports = {
             }
             models.Users.create({
               email: data.email,
-              username: data.name,
+              full_name: data.name,
               password: hash,
               default_loc: data.loc
             }).then( (newUser) => {
@@ -65,13 +59,14 @@ module.exports = {
   },
   login: (req, res) => {
     let data = req.body;
-    models.Users.findOne({where: {username: data.username}})
+    models.Users.findOne({where: {email: data.email}})
       .then( (user) => {
+        console.log(user, 'asdfasdf')
         if (!user) {
           console.log('invalid username');
           res.send(400, {error: 'User Account does not exist'});
         } else {
-          if (bcrypt.compareSync(data.password, user.dataValues.password)) {
+          if (bcrypt.compareSync(data.pw, user.dataValues.password)) {
             console.log('user login successful');
             module.exports.createSession(req, res, user);
           } else {
