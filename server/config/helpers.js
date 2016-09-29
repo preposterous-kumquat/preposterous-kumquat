@@ -85,6 +85,12 @@ module.exports = {
       res.redirect('/')
     });
   },
+  user: (req, res) => {
+    user = req.session.user;
+    delete user.password
+    console.log(req.session.user);
+    res.send(user);
+  },
   upload: (req, res) => {
     let userID = req.session.user.id;
     let userLoc = req.session.user.default_loc;
