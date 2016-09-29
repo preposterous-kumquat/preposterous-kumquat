@@ -29320,10 +29320,11 @@
 
 	  _createClass(SignupContainer, [{
 	    key: 'userSignup',
-	    value: function userSignup(name, email, pw) {
+	    value: function userSignup(name, email, loc, pw) {
 	      var data = {
 	        'name': name,
 	        'email': email,
+	        'loc': loc,
 	        'pw': pw
 	      };
 	      console.log(data);
@@ -29386,14 +29387,16 @@
 	          //e.preventDefault();
 	          var name = $('#name').val();
 	          var email = $('#email').val();
+	          var loc = $('#loc').val();
 	          var pw = $('#pw').val();
 	          var cpw = $('#cpw').val();
 	          if (pw !== cpw) {
 	            alert('Your passwords do not match.  Please try again.');
 	          } else {
-	            userSignup(name, email, pw);
+	            userSignup(name, email, loc, pw);
 	            $('#name').val('');
 	            $('#email').val('');
+	            $('#loc').val('');
 	            $('#pw').val('');
 	            $('#cpw').val('');
 	          }
@@ -29401,6 +29404,8 @@
 	      _react2.default.createElement('input', { type: 'text', placeholder: 'Name', id: 'name' }),
 	      _react2.default.createElement('br', null),
 	      _react2.default.createElement('input', { type: 'text', placeholder: 'Email', id: 'email' }),
+	      _react2.default.createElement('br', null),
+	      _react2.default.createElement('input', { type: 'text', placeholder: 'Location', id: 'loc' }),
 	      _react2.default.createElement('br', null),
 	      _react2.default.createElement('input', { type: 'password', placeholder: 'Password', id: 'pw' }),
 	      _react2.default.createElement('br', null),

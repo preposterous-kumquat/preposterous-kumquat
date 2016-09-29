@@ -11,10 +11,11 @@ class SignupContainer extends React.Component {
     this.userSignup = this.userSignup.bind(this);
   }
 
-  userSignup(name, email, pw) {
+  userSignup(name, email, loc, pw) {
     var data = {
       'name': name,
       'email': email,
+      'loc': loc,
       'pw': pw
     };
     console.log(data);
