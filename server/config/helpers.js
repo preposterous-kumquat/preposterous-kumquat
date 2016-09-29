@@ -3,8 +3,13 @@ const bcrypt = require('bcrypt-nodejs');
 const request = require('request');
 const multiparty = require('multiparty');
 const FormData = require('form-data');
+const geohash = require('ngeohash');
 
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
+
+let sendToCurator = (data) => {
+
+}
 
 module.exports = {
   requireLogin: (req, res, next) => {
@@ -114,13 +119,12 @@ module.exports = {
     });
 
     form.on('close', () => {
-      console.log('posting data to photo service')
-
+      console.log('posting data to photo service');
       let headers = {
        "headers": {
           'content-type': 'multipart/form-data',
           "transfer-encoding": "chunked"
-        } 
+        }
       };
 
       let r = request.post("http://requestb.in/1k8pwr51", headers, (err, response, body) => { 
@@ -128,6 +132,22 @@ module.exports = {
           console.log('error posting to photo service', err);
         } else {
           console.log('photo posted!');
+          models.Photos.findOne({where: {id: data.id}})
+          .then( (photo) => {
+            if (!photo) {
+              console.log('error querying DB');
+            } else {
+              body.geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
+              sendToCurator(body);
+              photo.update({
+                geohash: body.geohash,
+                file_url: body.path,
+              })
+              .then( () => {
+                console.log('updated photo')
+              })
+            }
+          })
           res.send(response);
         }
       });
@@ -139,6 +159,12 @@ module.exports = {
     let userID = req.session.user.id;
     let userLoc = req.session.user.default_loc;
     form.parse(req);
+  },
+  photos: (req, res) => {
+
+  },
+  stack: (req, res) => {
+
   }
-}
+};
 

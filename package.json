@@ -29,6 +29,7 @@
     "jquery": "^3.1.1",
     "morgan": "^1.7.0",
     "multiparty": "^4.1.2",
+    "ngeohash": "^0.6.0",
     "pg": "^6.1.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
