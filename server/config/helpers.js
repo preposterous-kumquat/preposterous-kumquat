@@ -127,7 +127,14 @@ module.exports = {
         }
       };
 
-      let r = request.post("http://requestb.in/1k8pwr51", headers, (err, response, body) => { 
+      // request.post('http://localhost:3001/test', headers, (err, response, body) => {
+      //   if (err) {console.log(err)}
+      //   console.log('response', response, 'body', body);
+      // })
+
+      // let r = request.post("http://requestb.in/1k8pwr51", headers, (err, response, body) => { 
+      // let r = request.post("http://localhost:3001/test", headers, (err, response, body) => { 
+      let r = request.post("http://localhost:3001/photoProcessor/upload", (err, response, body) => { 
         if (err) {
           console.log('error posting to photo service', err);
         } else {
