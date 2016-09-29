@@ -1,5 +1,6 @@
 const port = process.env.NODE_ENV === 'PROD' ? require('./config.js').PROD : require('./config.js').DEV;
 const models = require('../../db/index');
+const workers = require('./workers');
 const bcrypt = require('bcrypt-nodejs');
 const request = require('request');
 const multiparty = require('multiparty');
@@ -38,14 +39,15 @@ module.exports = {
     models.Users.findOne({where: {username: data.username}})
       .then( (user) => {
         if (!user) {
-          bcrypt.hash(data.password, null, null, (err, hash) => {
+          bcrypt.hash(data.pw, null, null, (err, hash) => {
             if (err) {
               console.log('hashing error', err);
             }
             models.Users.create({
-              username: data.username,
+              email: data.email,
+              username: data.name,
               password: hash,
-              default_loc: data.default_loc
+              default_loc: data.loc
             }).then( (newUser) => {
               console.log('user created successfully');
               module.exports.createSession(req, res, newUser);
@@ -104,7 +106,19 @@ module.exports = {
     });
   },
   photos: (req, res) => {
-
+    let userID = req.session.user.id;
+    
+    models.Photos.findAll({ 
+      where: {
+        UserId: userID
+      },
+      limit: 6,
+      order: 'createdAt DESC'
+    })
+    .then( (photos) => {
+      res.send(photos);
+      workers.prepStacks(photos);
+    });
   },
   stack: (req, res) => {
 
