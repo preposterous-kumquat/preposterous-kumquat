@@ -24,8 +24,13 @@ module.exports = {
   },
   createSession: (req, res, newUser) => {
     req.session.regenerate( () => {
+      console.log(newUser)
       req.session.user = newUser;
-      res.send();
+      let userData = {
+        username: newUser.username,
+        default_loc: newUser.default_loc
+      }
+      res.send(JSON.stringify(userData));
     });
   },
   signup: (req, res) => {
