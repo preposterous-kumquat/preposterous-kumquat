@@ -11,7 +11,7 @@ const http = require('http');
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
 let sendToCurator = (data) => {
-
+  request('http://localhost:3002/', {data: data});
 }
 
 module.exports = {
