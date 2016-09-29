@@ -13,9 +13,19 @@ import UploadContainer from './components/containers/uploadContainer.jsx';
 import SignupContainer from './components/containers/signupContainer.jsx';
 import SigninContainer from './components/containers/signinContainer.jsx';
 
-//TODO: fix routes
+// export default () => (
+//   <Router history={hashHistory}>
+//     <Route path="/" component={MainContainer}>
+//       <Route path="home" component={HomeContainer} />
+//       <Route path="upload" component={UploadContainer} />
+//       <Route path="carousel" component={CarouselContainer} />
+//       <Route path="signin" component={SigninContainer} />
+//       <Route path="signup" component={SignupContainer} />
+//    </Route>
+//   </Router>
+// );
 
-export default () => (
+export default (
   <Router history={hashHistory}>
     <Route path="/" component={MainContainer}>
       <Route path="home" component={HomeContainer} />
@@ -26,6 +36,7 @@ export default () => (
    </Route>
   </Router>
 );
+
 // export default (
 //   <Router history={browserHistory}>
 //     <Route path="/" component={MainContainer}>
