@@ -11,7 +11,7 @@ export default function(props) {
     <div>
       <h1>This is the signin view</h1>
       <form onSubmit={(e) => {
-        //e.preventDefault();
+        e.preventDefault();
         userSignin($('#email').val(), $('#pw').val());
         $('#email').val('');
         $('#pw').val('');

@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import HomeView from '../views/home.jsx';
 import store from '../../store.jsx';
+import axios from 'axios';
+// import { Router } from 'react-router';
 
 class HomeContainer extends React.Component {
   constructor(props) {
@@ -10,13 +12,14 @@ class HomeContainer extends React.Component {
       //
     };
   }
-  // componentDidMount() {
-  //   userApi.getUsers();
-  //   store.dispatch(loadSearchLayout('users', 'User Results'));
+  // componentWillMount() {
+  //   axios.get('/photos').then(res => {
+  //     console.log('/photos res>>>>>>>>>', res);
+  //   });
   // }
   render() {
     return (
-      <HomeView users={this.props.users} />
+      <HomeView { ...this.props } />
     );
   }
 
@@ -24,7 +27,7 @@ class HomeContainer extends React.Component {
 
 const mapStateToProps = function(store) {
   return {
-    //users: store.userState.users
+    hasAuth: store.userState.isLoggedIn
   };
 };
 

@@ -31,7 +31,6 @@ class SignupContainer extends React.Component {
       //dispatch to change user state
       //reroute using context.router.push('/route')
     });
-
   }
 
   render() {
