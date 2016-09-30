@@ -3,19 +3,21 @@ import { connect } from 'react-redux';
 import SigninView from '../views/signin.jsx';
 import store from '../../store.jsx';
 import axios from 'axios';
+import { Router } from 'react-router';
 
-import { Navigation } from 'react-router';
 
 class SigninContainer extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   username: ''
-    // };
     this.userSignin = this.userSignin.bind(this);
 
   }
 
+  static get contextTypes() {
+    return {
+      router: React.PropTypes.object.isRequired
+    };
+  }
 
   userSignin(email, pw) {
     var data = {
@@ -26,17 +28,25 @@ class SigninContainer extends React.Component {
 
     axios.post('/login', data).then(res => {
       axios.get('/user/details').then(res => {
-      //   store.dispatch({
-      //     type: 'USER_LIST_SUCCESS',
-      //     users: response.data
-      //   });
+        //dispatch to toggle login state
+        // store.dispatch({
+        //   type: 'USER_AUTH',
+        //   hasAuth: true
+        // });
+        //dispatch to change user state
+        // store.dispatch({
+        //   type: 'USER_LIST_SUCCESS',
+        //   users: response.data
+        // });
         // this.context.router.push('/home');
       });
-      //dispatch to toggle login state
-      //dispatch to change user state
       //reroute using context.router.push('/route')
     });
-
+    store.dispatch({
+      type: 'USER_AUTH',
+      hasAuth: true
+    });
+    this.context.router.push('/home');
   }
 
   render() {
