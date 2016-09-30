@@ -11,8 +11,30 @@ const http = require('http');
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
 let sendToCurator = (data) => {
-  request('http://localhost:3002/', {data: data});
-}
+  let options = {
+    uri: 'http://localhost:3002/save',
+    method: 'POST',
+    json: data
+  };
+  request(options, (err, response, body) => {
+    console.log('data sent')
+  });
+};
+
+let getStack = (id) => {
+  let options = {
+    uri: 'http://localhost:3002/getstack',
+    method: 'GET',
+    json: id
+  };
+  request(options, (err, response, body) => {
+    if (err) {
+      console.log('error in getting stack', err);
+    }
+    console.log('stack received', body);
+  });
+};
+
 
 module.exports = {
   requireLogin: (req, res, next) => {
@@ -114,7 +136,7 @@ module.exports = {
         UserId: userID
       },
       limit: 6,
-      order: 'createdAt DESC'
+      order: '"createdAt" DESC'
     })
     .then( (photos) => {
       res.send(photos);
@@ -122,10 +144,12 @@ module.exports = {
     });
   },
   stack: (req, res) => {
-
+    let seed = {id: req.body.id, theme: req.body.theme};
+    getStack(seed);
   },
   savedPhoto: (req, res) => {
     let body = req.body;
+    console.log(body, '================================================')
     models.Photos.findOne({where: {id: body.id}})
       .then( (photo) => {
         body.geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
@@ -155,7 +179,7 @@ module.exports = {
               return photo.addKeywords(keywordsPK);
             })
             .catch((err) => {
-              console.log('ERROR: ', err);
+              // console.log('ERROR: ', err);
             });
         });
       })
@@ -163,7 +187,7 @@ module.exports = {
         res.send('successfully saved photo');
       })
       .catch((err) => {
-        console.log('ERROR: ', err);
+        // console.log('ERROR: ', err);
       });
   }
 };
