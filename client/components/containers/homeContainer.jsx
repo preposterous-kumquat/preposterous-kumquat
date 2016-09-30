@@ -12,11 +12,11 @@ class HomeContainer extends React.Component {
       //
     };
   }
-  componentWillMount() {
-    axios.get('/photos').then(res => {
-      console.log('/photos res>>>>>>>>>', res);
-    });
-  }
+  // componentWillMount() {
+  //   axios.get('/photos').then(res => {
+  //     console.log('/photos res>>>>>>>>>', res);
+  //   });
+  // }
   render() {
     return (
       <HomeView { ...this.props } />
