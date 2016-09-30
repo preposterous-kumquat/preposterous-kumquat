@@ -36,6 +36,9 @@ module.exports = (app, express) => {
   app.post('/upload', helpers.requireLogin, (req, res) => {
     helpers.upload(req, res);
   });
+  app.post('/savedPhoto', (req, res) => {
+    helpers.savedPhoto(req, res);
+  });
 
 // GET THUMBNAILS
   app.get('/photos', helpers.requireLogin, (req, res) => {
@@ -45,5 +48,10 @@ module.exports = (app, express) => {
 // GET STACK
   app.get('/stack', helpers.requireLogin, (req, res) => {
     helpers.stack(req, res);
+  });
+
+// GET USER DEETS
+  app.get('/user/details', helpers.requireLogin, (req, res) => {
+    helpers.user(req, res);
   });
 };

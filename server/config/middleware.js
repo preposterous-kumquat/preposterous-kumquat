@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const db = require('../../db/index.js')
-const secret = require('../../api-key.js')
+const db = require('../../db/index.js');
+const secret = require('../../api-key.js');
 
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
@@ -15,7 +15,7 @@ module.exports = (app, express) => {
   app.use(cookieParser(secret.secret));
   app.use(session({
     secret: secret.secret,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
     store: new SequelizeStore({
