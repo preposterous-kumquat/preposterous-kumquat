@@ -10,7 +10,14 @@ class MainContainer extends React.Component {
     // why doesn't this syntax work???
     // var { hasAuth } = this.props;
     // console.log(hasAuth);
-    console.log("store.userState.isLoggedIn", store.userState.isLoggedIn);
+    //console.log("store.userState.isLoggedIn", store.userState.isLoggedIn);
+    this.userSignout = this.userSignout.bind(this);
+  }
+  userSignout() {
+    this.props.dispatch({
+      type: 'USER_AUTH',
+      hasAuth: false
+    });
   }
   // componentDidMount() {
   //   console.log(this.props.hasAuth);
@@ -22,7 +29,7 @@ class MainContainer extends React.Component {
   render() {
     return (
       <div>
-        {this.props.hasAuth ? <MainLayout { ...this.props } /> : <LandingLayout { ...this.props } />}
+        {this.props.hasAuth ? <MainLayout { ...this.props } userSignout={this.userSignout} /> : <LandingLayout { ...this.props } />}
       </div>
     );
   }
@@ -54,3 +61,4 @@ const mapStateToProps = function(store) {
 };
 
 export default connect(mapStateToProps)(MainContainer);
+

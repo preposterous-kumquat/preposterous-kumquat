@@ -8,15 +8,13 @@ import axios from 'axios';
 class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      //
-    };
+
+    //method bindings
+    this.getUserPhotos = this.getUserPhotos.bind(this);
   }
-  // componentWillMount() {
-  //   axios.get('/photos').then(res => {
-  //     console.log('/photos res>>>>>>>>>', res);
-  //   });
-  // }
+  getUserPhotos() {
+    
+  }
   render() {
     return (
       <HomeView { ...this.props } />

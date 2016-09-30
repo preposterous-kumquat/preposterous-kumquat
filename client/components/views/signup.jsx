@@ -9,7 +9,7 @@ export default function(props) {
     <div>
       <h1>This is the signup view</h1>
       <form onSubmit={(e) => {
-        //e.preventDefault();
+        e.preventDefault();
         var name = $('#name').val();
         var email = $('#email').val();
         var loc = $('#loc').val();

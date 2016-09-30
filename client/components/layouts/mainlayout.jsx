@@ -13,7 +13,7 @@ export default props => (
       </span>
       <span> | </span>
       <span>
-        <Link to='/signin' activeClassName="active">SIGN OUT</Link>
+        <Link to='/signin' activeClassName="active" onClick={props.userSignout}>SIGN OUT</Link>
       </span>
     </nav>
     <main>

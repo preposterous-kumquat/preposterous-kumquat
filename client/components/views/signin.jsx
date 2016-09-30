@@ -12,7 +12,9 @@ export default function(props) {
       <h1>This is the signin view</h1>
       <form onSubmit={(e) => {
         e.preventDefault();
-        userSignin($('#email').val(), $('#pw').val());
+        var email = $('#email').val();
+        var pw = $('#pw').val();
+        userSignin(email, pw);
         $('#email').val('');
         $('#pw').val('');
       }}>

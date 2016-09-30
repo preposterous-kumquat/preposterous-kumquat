@@ -12,6 +12,7 @@ const userInitState = {
 
 // The User Reducer
 const userReducer = function(state = userInitState, action) {
+  //console.log('reducer', action.hasAuth);
   switch (action.type) {
   case 'USER_AUTH':
     //return Object.assign({}, state, { users: action.users });

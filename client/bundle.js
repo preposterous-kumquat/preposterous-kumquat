@@ -28728,7 +28728,7 @@
 	        null,
 	        _react2.default.createElement(
 	          _reactRouter.Link,
-	          { to: '/signin', activeClassName: 'active' },
+	          { to: '/signin', activeClassName: 'active', onClick: props.userSignout },
 	          'SIGN OUT'
 	        )
 	      )
@@ -28808,6 +28808,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -28842,17 +28844,27 @@
 	  function MainContainer(props) {
 	    _classCallCheck(this, MainContainer);
 
-	    return _possibleConstructorReturn(this, (MainContainer.__proto__ || Object.getPrototypeOf(MainContainer)).call(this, props));
 	    // why doesn't this syntax work???
 	    // var { hasAuth } = this.props;
 	    // console.log(hasAuth);
+	    //console.log("store.userState.isLoggedIn", store.userState.isLoggedIn);
+	    var _this = _possibleConstructorReturn(this, (MainContainer.__proto__ || Object.getPrototypeOf(MainContainer)).call(this, props));
+
+	    _this.userSignout = _this.userSignout.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(MainContainer, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      console.log(this.props.hasAuth);
+	    key: 'userSignout',
+	    value: function userSignout() {
+	      this.props.dispatch({
+	        type: 'USER_AUTH',
+	        hasAuth: false
+	      });
 	    }
+	    // componentDidMount() {
+	    //   console.log(this.props.hasAuth);
+	    // }
 	    // componentDidMount() {
 	    //   userApi.getUsers();
 	    //   store.dispatch(loadSearchLayout('users', 'User Results'));
@@ -28864,7 +28876,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        this.props.hasAuth ? _react2.default.createElement(_mainlayout2.default, this.props) : _react2.default.createElement(_landinglayout2.default, this.props)
+	        this.props.hasAuth ? _react2.default.createElement(_mainlayout2.default, _extends({}, this.props, { userSignout: this.userSignout })) : _react2.default.createElement(_landinglayout2.default, this.props)
 	      );
 	    }
 	    //console.log(this.props.hasAuth);
@@ -28956,6 +28968,7 @@
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? userInitState : arguments[0];
 	  var action = arguments[1];
 
+	  //console.log('reducer', action.hasAuth);
 	  switch (action.type) {
 	    case 'USER_AUTH':
 	      //return Object.assign({}, state, { users: action.users });
@@ -28965,12 +28978,10 @@
 	};
 
 	// The Widget Reducer
-	var widgetReducer = function widgetReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var action = arguments[1];
+	// const widgetReducer = function(state = {}, action) {
+	//   return state;
+	// };
 
-	  return state;
-	};
 
 	// Combine Reducers
 	var reducers = (0, _redux.combineReducers)({
@@ -29055,21 +29066,16 @@
 	  function HomeContainer(props) {
 	    _classCallCheck(this, HomeContainer);
 
+	    //method bindings
 	    var _this = _possibleConstructorReturn(this, (HomeContainer.__proto__ || Object.getPrototypeOf(HomeContainer)).call(this, props));
 
-	    _this.state = {
-	      //
-	    };
+	    _this.getUserPhotos = _this.getUserPhotos.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(HomeContainer, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      _axios2.default.get('/photos').then(function (res) {
-	        console.log('/photos res>>>>>>>>>', res);
-	      });
-	    }
+	    key: 'getUserPhotos',
+	    value: function getUserPhotos() {}
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -29099,7 +29105,6 @@
 	});
 
 	exports.default = function (props) {
-	  console.log(props.hasAuth);
 	  return _react2.default.createElement(
 	    'div',
 	    null,
@@ -30697,6 +30702,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	//import { Router } from 'react-router';
+
 	var SignupContainer = function (_React$Component) {
 	  _inherits(SignupContainer, _React$Component);
 
@@ -30712,6 +30719,8 @@
 	  _createClass(SignupContainer, [{
 	    key: 'userSignup',
 	    value: function userSignup(name, email, loc, pw) {
+	      var _this2 = this;
+
 	      var data = {
 	        'name': name,
 	        'email': email,
@@ -30721,21 +30730,43 @@
 	      console.log(data);
 
 	      _axios2.default.post('/signup', data).then(function (res) {
+	        console.log('res>>>>>', res.status);
+	        //on success - status 200
 	        _axios2.default.get('/user/details').then(function (res) {
 	          //   store.dispatch({
 	          //     type: 'USER_LIST_SUCCESS',
 	          //     users: response.data
 	          //   });
+	          _store2.default.dispatch({
+	            type: 'USER_AUTH',
+	            hasAuth: true
+	          });
+	          _this2.context.router.push('/home');
 	        });
 	        //dispatch to toggle login state
 	        //dispatch to change user state
 	        //reroute using context.router.push('/route')
+	      }).catch(function (err) {
+	        //on error - status 401
+
 	      });
+	      // store.dispatch({
+	      //   type: 'USER_AUTH',
+	      //   hasAuth: true
+	      // });
+	      // this.context.router.push('/home');
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(_signup2.default, { userSignup: this.userSignup });
+	    }
+	  }], [{
+	    key: 'contextTypes',
+	    get: function get() {
+	      return {
+	        router: _react2.default.PropTypes.object.isRequired
+	      };
 	    }
 	  }]);
 
@@ -30775,7 +30806,7 @@
 	    _react2.default.createElement(
 	      'form',
 	      { onSubmit: function onSubmit(e) {
-	          //e.preventDefault();
+	          e.preventDefault();
 	          var name = $('#name').val();
 	          var email = $('#email').val();
 	          var loc = $('#loc').val();
@@ -30858,8 +30889,6 @@
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _reactRouter = __webpack_require__(196);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30867,6 +30896,9 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//import { Router } from 'react-router';
+
 
 	var SigninContainer = function (_React$Component) {
 	  _inherits(SigninContainer, _React$Component);
@@ -30881,36 +30913,49 @@
 	    return _this;
 	  }
 
+	  //for context router to work
+
+
 	  _createClass(SigninContainer, [{
+	    key: 'getUserPhotos',
+	    value: function getUserPhotos() {
+	      _axios2.default.get('/photos').then(function (res) {}).catch(function (err) {
+	        console.log(error);
+	      });
+	    }
+	  }, {
 	    key: 'userSignin',
 	    value: function userSignin(email, pw) {
+	      var _this2 = this;
+
 	      var data = {
 	        'email': email,
 	        'pw': pw
 	      };
-	      console.log(data);
 
 	      _axios2.default.post('/login', data).then(function (res) {
-	        _axios2.default.get('/user/details').then(function (res) {
-	          //dispatch to toggle login state
-	          // store.dispatch({
-	          //   type: 'USER_AUTH',
-	          //   hasAuth: true
-	          // });
-	          //dispatch to change user state
-	          // store.dispatch({
-	          //   type: 'USER_LIST_SUCCESS',
-	          //   users: response.data
-	          // });
-	          // this.context.router.push('/home');
-	        });
-	        //reroute using context.router.push('/route')
+	        console.log('res.status>>>>>', res.status);
+	        if (res.status === 200) {
+	          _axios2.default.get('/user/details').then(function (res) {
+	            //dispatch to change user state
+	            // store.dispatch({
+	            //   type: 'USER_LIST_SUCCESS',
+	            //   users: response.data
+	            // });
+	            // this.context.router.push('/home');
+	            _store2.default.dispatch({
+	              type: 'USER_AUTH',
+	              hasAuth: true
+	            });
+	            _this2.context.router.push('/home');
+	          });
+	        }
 	      });
-	      _store2.default.dispatch({
-	        type: 'USER_AUTH',
-	        hasAuth: true
-	      });
-	      this.context.router.push('/home');
+	      // store.dispatch({
+	      //   type: 'USER_AUTH',
+	      //   hasAuth: true
+	      // });
+	      // this.context.router.push('/home');
 	    }
 	  }, {
 	    key: 'render',
@@ -30928,10 +30973,6 @@
 
 	  return SigninContainer;
 	}(_react2.default.Component);
-
-	// SigninContainer.contextTypes = {
-	//   router: PropTypes.object.isRequired
-	// };
 
 	var mapStateToProps = function mapStateToProps(store) {
 	  return {
@@ -30973,8 +31014,10 @@
 	    _react2.default.createElement(
 	      'form',
 	      { onSubmit: function onSubmit(e) {
-	          //e.preventDefault();
-	          userSignin($('#email').val(), $('#pw').val());
+	          e.preventDefault();
+	          var email = $('#email').val();
+	          var pw = $('#pw').val();
+	          userSignin(email, pw);
 	          $('#email').val('');
 	          $('#pw').val('');
 	        } },
