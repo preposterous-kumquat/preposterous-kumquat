@@ -6,9 +6,10 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Themes.hasOne(models.Photos);
-        Themes.hasMany(models.Keywords);
+        Themes.belongsToMany(models.Keywords, {through: 'ThemeKeywords'});
       }
     }
   });
   return Themes;
 };
+    
