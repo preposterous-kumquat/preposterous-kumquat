@@ -21,9 +21,9 @@ const userReducer = function(state = userInitState, action) {
 };
 
 // The Widget Reducer
-const widgetReducer = function(state = {}, action) {
-  return state;
-};
+// const widgetReducer = function(state = {}, action) {
+//   return state;
+// };
 
 
 // Combine Reducers

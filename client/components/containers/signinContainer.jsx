@@ -42,7 +42,8 @@ class SigninContainer extends React.Component {
       });
       //reroute using context.router.push('/route')
     });
-    store.dispatch({
+    // store.dispatch({
+    this.props.dispatch({
       type: 'USER_AUTH',
       hasAuth: true
     });

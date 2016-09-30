@@ -10,10 +10,11 @@ class MainContainer extends React.Component {
     // why doesn't this syntax work???
     // var { hasAuth } = this.props;
     // console.log(hasAuth);
+    console.log("store.userState.isLoggedIn", store.userState.isLoggedIn);
   }
-  componentDidMount() {
-    console.log(this.props.hasAuth);
-  }
+  // componentDidMount() {
+  //   console.log(this.props.hasAuth);
+  // }
   // componentDidMount() {
   //   userApi.getUsers();
   //   store.dispatch(loadSearchLayout('users', 'User Results'));
