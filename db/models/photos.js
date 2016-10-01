@@ -8,9 +8,12 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Photos.belongsTo(models.Users);
         Photos.belongsTo(models.Themes);
-        Photos.belongsToMany(models.Keywords, {through: 'PhotosKeywords'});     
+        Photos.belongsToMany(models.Keywords, {through: 'PhotosKeywords'});      
       }
     }
   });
   return Photos;
 };
+
+// How to query
+// Item.find({where:{name: "Coffee"},include:[{model: Item, as: 'Subitems'}]})
