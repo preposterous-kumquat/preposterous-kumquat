@@ -35,22 +35,34 @@ import axios from 'axios';
 
 // export default connect(mapStateToProps)(UploadContainer);
 
+//TODO: refactor to separate container and view
 class UploadContainer extends React.Component {
   constructor(props) {
     super(props);
     //this.state = {file: '',imagePreviewUrl: ''};
     console.log('uploadContainer loaded');
   }
+  
+  //for context router to work
+  static get contextTypes() {
+    return {
+      router: React.PropTypes.object.isRequired
+    };
+  }
 
   _handleSubmit(e) {
     e.preventDefault();
-    //TODO
+    var formData = new FormData();
+    var userPhoto = new Blob([this.props.file], { type: 'image/png'});
     var theme = $('#theme').val();
+    formData.append('photo', userPhoto);
+    formData.append('theme', theme);
+
     if (theme) {
       console.log('file>>>>>>>', this.props.file);
-      //TODO: format data to include theme and file data
-      axios.post('/upload', data).then(res => {
-        //redirect to carousel page
+      axios.post('/upload', formData).then(res => {
+        console.log('Successfully uploaded photo:', res);
+        this.context.router.push('/carousel');
       }).catch(err =>{
         console.log('Error uploading photo:', err);
       });
@@ -74,7 +86,6 @@ class UploadContainer extends React.Component {
         type: 'IMG_THUMB',
         imgThumb: reader.result
       });
-      //this.context.router.push('/home');
     };
 
     reader.readAsDataURL(file);
