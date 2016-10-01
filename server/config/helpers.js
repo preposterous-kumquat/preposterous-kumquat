@@ -81,6 +81,7 @@ module.exports = {
   },
   login: (req, res) => {
     let data = req.body;
+    console.log('inside login>>>>>>>>>');
     models.Users.findOne({where: {email: data.email}})
       .then( (user) => {
         console.log(user, 'asdfasdf')
@@ -114,6 +115,7 @@ module.exports = {
     res.send(user);
   },
   upload: (req, res) => {
+    console.log('INSIDE OF UPLOAD');
     let userID = req.session.user.id;
     let userLoc = req.session.user.default_loc;
 
@@ -124,6 +126,7 @@ module.exports = {
     })
     .then( (photo) => {
       let photoId = photo.dataValues.id;
+      console.log('in here tooooooooo 8888888')
       /************************ NEED TO FIX FOR DEV *********************************/
       req.pipe(request(`http://localhost:3001/photoProcessor/upload/${photoId}`)).pipe(res);
     });
@@ -140,7 +143,7 @@ module.exports = {
     })
     .then( (photos) => {
       res.send(photos);
-      workers.prepStacks(photos);
+      // workers.prepStacks(photos);
     });
   },
   stack: (req, res) => {

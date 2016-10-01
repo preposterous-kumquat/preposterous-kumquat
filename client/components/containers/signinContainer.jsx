@@ -33,7 +33,7 @@ class SigninContainer extends React.Component {
       'email': email,
       'pw': pw
     };
-
+    console.log('inside userSignin');
     axios.post('/login', data).then(res => {
       console.log('res.status>>>>>', res.status);
       if (res.status === 200) {
