@@ -34,11 +34,13 @@ let getStack = (seed, res) => {
     if (err) {
       console.log('error in getting stack', err);
     }
-    console.log('stack received', body);
+    console.log('stack received', JSON.parse(body));
     var mapped = {};
     let parsed = JSON.parse(body);
-    parsed.forEach( (photo) => {
-      mapped[photo.key] = {
+    parsed.forEach( (photo, idx) => {
+      console.log(photo, 'this is the current photo')
+      mapped[idx] = {
+        id: photo.key,
         url: photo.url,
         lat: photo.latitude,
         long: photo.longitude
@@ -97,7 +99,7 @@ module.exports = {
     console.log('inside login>>>>>>>>>');
     models.Users.findOne({where: {email: data.email}})
       .then( (user) => {
-        console.log(user, 'asdfasdf')
+        console.log(data, 'asdfasdf')
         if (!user) {
           console.log('invalid username');
           res.send(400, {error: 'User Account does not exist'});
