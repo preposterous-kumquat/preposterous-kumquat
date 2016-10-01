@@ -21,17 +21,32 @@ let sendToCurator = (data) => {
   });
 };
 
-let getStack = (id) => {
+let getStack = (seed, res) => {
   let options = {
     uri: 'http://localhost:3002/getstack',
     method: 'GET',
-    json: id
+    qs: {
+      id: seed.id,
+      theme: seed.theme
+    }
   };
   request(options, (err, response, body) => {
     if (err) {
       console.log('error in getting stack', err);
     }
-    console.log('stack received', body);
+    console.log('stack received', JSON.parse(body));
+    var mapped = {};
+    let parsed = JSON.parse(body);
+    parsed.forEach( (photo, idx) => {
+      console.log(photo, 'this is the current photo')
+      mapped[idx] = {
+        id: photo.key,
+        url: photo.url,
+        lat: photo.latitude,
+        long: photo.longitude
+      }
+    })
+    res.send(mapped);
   });
 };
 
@@ -84,7 +99,7 @@ module.exports = {
     console.log('inside login>>>>>>>>>');
     models.Users.findOne({where: {email: data.email}})
       .then( (user) => {
-        console.log(user, 'asdfasdf')
+        console.log(data, 'asdfasdf')
         if (!user) {
           console.log('invalid username');
           res.send(400, {error: 'User Account does not exist'});
@@ -147,12 +162,11 @@ module.exports = {
     });
   },
   stack: (req, res) => {
-    let seed = {id: req.body.id, theme: req.body.theme};
-    getStack(seed);
+    let seed = req.query;
+    getStack(seed, res);
   },
   savedPhoto: (req, res) => {
     let body = req.body;
-    console.log(body, '================================================')
     models.Photos.findOne({where: {id: body.id}})
       .then( (photo) => {
         body.geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
