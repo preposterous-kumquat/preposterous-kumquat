@@ -21,17 +21,30 @@ let sendToCurator = (data) => {
   });
 };
 
-let getStack = (id) => {
+let getStack = (seed, res) => {
   let options = {
     uri: 'http://localhost:3002/getstack',
     method: 'GET',
-    json: id
+    qs: {
+      id: seed.id,
+      theme: seed.theme
+    }
   };
   request(options, (err, response, body) => {
     if (err) {
       console.log('error in getting stack', err);
     }
     console.log('stack received', body);
+    var mapped = {};
+    let parsed = JSON.parse(body);
+    parsed.forEach( (photo) => {
+      mapped[photo.key] = {
+        url: photo.url,
+        lat: photo.latitude,
+        long: photo.longitude
+      }
+    })
+    res.send(mapped);
   });
 };
 
@@ -147,12 +160,11 @@ module.exports = {
     });
   },
   stack: (req, res) => {
-    let seed = {id: req.body.id, theme: req.body.theme};
-    getStack(seed);
+    let seed = req.query;
+    getStack(seed, res);
   },
   savedPhoto: (req, res) => {
     let body = req.body;
-    console.log(body, '================================================')
     models.Photos.findOne({where: {id: body.id}})
       .then( (photo) => {
         body.geohash = body.GPS ? geohash.encode(body.GPS.lat, body.GPS.long) : photo.dataValues.geohash;
