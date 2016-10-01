@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import SigninView from '../views/signin.jsx';
 import store from '../../store.jsx';
 import axios from 'axios';
-import { Router } from 'react-router';
+//import { Router } from 'react-router';
 
 
 class SigninContainer extends React.Component {
@@ -13,10 +13,19 @@ class SigninContainer extends React.Component {
 
   }
 
+  //for context router to work
   static get contextTypes() {
     return {
       router: React.PropTypes.object.isRequired
     };
+  }
+
+  getUserPhotos() {
+    axios.get('/photos').then(res => {
+
+    }).catch(err => {
+      console.log(error);
+    });
   }
 
   userSignin(email, pw) {
@@ -24,30 +33,31 @@ class SigninContainer extends React.Component {
       'email': email,
       'pw': pw
     };
-    console.log(data);
-
+    console.log('inside userSignin');
     axios.post('/login', data).then(res => {
-      axios.get('/user/details').then(res => {
-        //dispatch to toggle login state
-        // store.dispatch({
-        //   type: 'USER_AUTH',
-        //   hasAuth: true
-        // });
+      console.log('res.status>>>>>', res.status);
+      if (res.status === 200) {
+        axios.get('/user/details').then(res => {
         //dispatch to change user state
         // store.dispatch({
         //   type: 'USER_LIST_SUCCESS',
         //   users: response.data
         // });
         // this.context.router.push('/home');
-      });
-      //reroute using context.router.push('/route')
+          store.dispatch({
+            type: 'USER_AUTH',
+            hasAuth: true
+          });
+          this.context.router.push('/home');
+        });
+      }
+      
     });
     // store.dispatch({
-    this.props.dispatch({
-      type: 'USER_AUTH',
-      hasAuth: true
-    });
-    this.context.router.push('/home');
+    //   type: 'USER_AUTH',
+    //   hasAuth: true
+    // });
+    // this.context.router.push('/home');
   }
 
   render() {
@@ -57,10 +67,6 @@ class SigninContainer extends React.Component {
   }
 
 }
-
-// SigninContainer.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
 
 const mapStateToProps = function(store) {
   return {
