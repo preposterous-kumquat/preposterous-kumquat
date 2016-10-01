@@ -42,6 +42,27 @@ npm install
 bower install
 ```
 
+### Seed Database Data
+
+From db/seeds directory:
+
+Make sure postgres is running
+Drop database and create empty database
+
+```sh
+drop database app;
+// DROP DATABASE
+create database app;
+// CREATE DATABASE
+```
+Restart main server
+
+Run seed.js using node
+```sh
+run node seeds.js
+```
+* If pushing to redis server, uncomment out the redis line. Note* this has not been tested.
+
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
