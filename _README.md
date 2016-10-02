@@ -61,6 +61,9 @@ Run seed.js using node
 ```sh
 run node seeds.js
 ```
+
+email: kumquat@gmail.com
+pw: 123
 * If pushing to redis server, uncomment out the redis line. Note* this has not been tested.
 
 ### Roadmap
