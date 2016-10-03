@@ -16,8 +16,15 @@ class HomeContainer extends React.Component {
     
   }
   render() {
+    let sampleData = [
+      'http://www.wallpapereast.com/static/images/nature-view-for-you-wide-wallpaper-339094.jpg',
+      'http://www.wallpapereast.com/static/images/nature_wallpaper_hd33.jpg',
+      'http://www.wallpapereast.com/static/images/nature-wallpaper-1440x900-004.jpg',
+      'http://www.wallpapereast.com/static/images/6973269-nature-wallpapers-widescreen.jpg',
+      'http://www.wallpapereast.com/static/images/nature-wallpapers-hd_VBh2qs3.jpg',
+    ];
     return (
-      <HomeView { ...this.props } />
+      <HomeView { ...this.props } sampleData={sampleData} />
     );
   }
 

@@ -1,7 +1,8 @@
 const helpers = require('./helpers.js');
+var join = require('path').join;
 
 module.exports = (app, express) => {
-  app.use(express.static(__dirname + '/../../client'));
+  app.use(express.static(join(__dirname, '/../../client')));
 
   app.get('/test', (req, res) => {
     helpers.test(req, res);
@@ -11,7 +12,8 @@ module.exports = (app, express) => {
 // STATIC LANDING PAGE
   app.get('/', (req, res) => {
     res.render();
-  })
+  });
+  
 // CHECK SESSION
   app.get('/checkauth', helpers.requireLogin, (req, res) => {
     res.send(200);
