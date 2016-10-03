@@ -54,8 +54,8 @@ async.parallel({
     let travelKeywords = gatherKeywords(travelPhotos);
     for (var i = 0; i < travelKeywords.length; i++) {
       if (i === travelKeywords.length - 1) {
-        db.Keywords.findOrCreate({
-          keyword: travelKeywords[i]
+        db.Keywords.findOrCreate({where: 
+          {keyword: travelKeywords[i]}
         }).then(() => {
           callback();
         }).catch((err) => {
@@ -63,8 +63,8 @@ async.parallel({
         });
 
       } else {
-        db.Keywords.findOrCreate({
-          keyword: travelKeywords[i]
+        db.Keywords.findOrCreate({where: 
+          {keyword: travelKeywords[i]}
         }).catch((err) => {
           console.log('Error: ', err);
         });
