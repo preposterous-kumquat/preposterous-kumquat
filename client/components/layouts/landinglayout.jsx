@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 export default props => (
-  <div>
+  <div className='contentBox'>
     <nav className='navBar'>
       <span>
         <Link to='/signin' activeClassName="active">SIGN IN</Link>

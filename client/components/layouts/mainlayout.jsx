@@ -2,14 +2,14 @@ import React from 'react';
 import { Link } from 'react-router';
 
 export default props => (
-  <div>
+  <div className='contentBox'>
     <nav className='navBar'>
       <span>
         <Link to='/home' activeClassName="active">HOME</Link>
       </span>
       <span> | </span>
       <span>
-        <Link to='/upload' activeClassName="active">UPLOAD PHOTO</Link>
+        <Link to='/upload' activeClassName="active">UPLOAD</Link>
       </span>
       <span> | </span>
       <span>
