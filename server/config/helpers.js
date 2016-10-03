@@ -7,6 +7,7 @@ const multiparty = require('multiparty');
 const FormData = require('form-data');
 const geohash = require('ngeohash');
 const http = require('http');
+const countries = require('../countries/countriesJSON');
 
 let isLoggedIn = (req) => req.session ? !!req.session.user : false;
 
@@ -74,11 +75,12 @@ module.exports = {
             if (err) {
               console.log('hashing error', err);
             }
+            let defaultGeohash = geohash.encode(countries[data.loc].lat, countries[data.loc].long);
             models.Users.create({
               email: data.email,
               full_name: data.name,
               password: hash,
-              default_loc: data.loc
+              default_loc: defaultGeohash
             }).then( (newUser) => {
               console.log('user created successfully');
               module.exports.createSession(req, res, newUser);
