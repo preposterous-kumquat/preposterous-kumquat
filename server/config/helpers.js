@@ -17,7 +17,7 @@ let sendToCurator = (data) => {
     json: data
   };
   request(options, (err, response, body) => {
-    console.log('data sent')
+    console.log('data sent');
   });
 };
 
@@ -206,6 +206,7 @@ module.exports = {
       .catch((err) => {
         // console.log('ERROR: ', err);
       });
-  }
+  },
+  sendToCurator: sendToCurator
 };
 
