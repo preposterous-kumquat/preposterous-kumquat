@@ -143,7 +143,6 @@ module.exports = {
     })
     .then( (photo) => {
       let photoId = photo.dataValues.id;
-      console.log('in here tooooooooo 8888888')
       /************************ NEED TO FIX FOR DEV *********************************/
       req.pipe(request(`http://localhost:3001/photoProcessor/upload/${photoId}`)).pipe(res);
     });
@@ -209,6 +208,9 @@ module.exports = {
         // console.log('ERROR: ', err);
       });
   },
-  sendToCurator: sendToCurator
+  sendToCurator: sendToCurator,
+  validPhoto: (req, res) => {
+    req.pipe(request('http://localhost:3001/photoProcessor/validPhoto')).pipe(res);
+  }
 };
 
