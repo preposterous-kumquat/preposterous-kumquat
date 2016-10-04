@@ -33,11 +33,6 @@ main {
 	/*width: 90%;*/
 }
 
-.center {
-	width: 75%;
-	margin: auto;
-}
-
 html, body {
 	background-color: #006C71;
 	color: rgba(255, 255, 255, .8);
@@ -61,14 +56,18 @@ img {
 	box-shadow: 3px 3px 5px #D2CFBA;
 }
 
-/*.slick-prev:after {
-  content: ">";
-  color: red;
-  font-size: 30px;
+img.theme {
+	width: 30px;
+	margin: 2px;
 }
 
-.slick-next:before {
-  content: "<";
-  color: red;
-  font-size: 30px;
-}*/
+img.theme.selected {
+	-webkit-box-shadow: 0px 0px 5px 2px rgba(59,154,255,1);
+	-moz-box-shadow: 0px 0px 5px 2px rgba(59,154,255,1);
+	box-shadow: 0px 0px 5px 2px rgba(59,154,255,1);
+}
+
+p#theme {
+	visibility: hidden;
+	float: right;
+}

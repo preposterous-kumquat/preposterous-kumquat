@@ -15,6 +15,10 @@ class CarouselContainer extends React.Component {
     };
   }
 
+  // componentWillMount() {
+  //   $('body').addClass('loaded');
+  // }
+
   componentDidMount() {
     $('.center').slick({
       centerMode: true,
