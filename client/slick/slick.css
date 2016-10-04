@@ -83,6 +83,11 @@
     opacity: 1;
 }
 
+.center {
+    width: 85%;
+    margin: auto;
+}
+
 
 [dir='rtl'] .slick-slide {
     float: right;
@@ -100,7 +105,7 @@
 
 .slick-center img {
     display: block;
-    max-height: 200px;
+    max-height: 250px;
     /*width: 100%;*/
 }
 

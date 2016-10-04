@@ -12,6 +12,7 @@ import CarouselContainer from './components/containers/carouselContainer.jsx';
 import UploadContainer from './components/containers/uploadContainer.jsx';
 import SignupContainer from './components/containers/signupContainer.jsx';
 import SigninContainer from './components/containers/signinContainer.jsx';
+import LoadingView from './components/views/loading.jsx';
 
 // export default () => (
 //   <Router history={hashHistory}>
@@ -33,6 +34,7 @@ export default (
       <Route path="carousel" component={CarouselContainer} />
       <Route path="signin" component={SigninContainer} />
       <Route path="signup" component={SignupContainer} />
+      <Route path="loading" component={LoadingView} />
    </Route>
   </Router>
 );
