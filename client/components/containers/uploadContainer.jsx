@@ -50,20 +50,56 @@ class UploadContainer extends React.Component {
     };
   }
 
+  componentDidMount() {
+    $('theme').on('click', function() {
+      $(this).addClass('selected');
+    });
+  }
+
   _handleSubmit(e) {
     e.preventDefault();
     var formData = new FormData();
     var userPhoto = new Blob([this.props.file], { type: 'image/png'});
-    var theme = $('#theme').val();
+    // var theme = $('#theme').val();
+    var theme = $('#theme').text();
+    console.log('theme>>>>>', theme);
     formData.append('photo', userPhoto);
     formData.append('theme', theme);
 
     if (theme) {
       console.log('file>>>>>>>', this.props.file);
+      
+      // redirect to loading page...
+      this.context.router.push('/loading');
+
       axios.post('/upload', formData).then(res => {
         console.log('Successfully uploaded photo:', res);
+
+        //reset image preview
+        store.dispatch({
+          type: 'IMG_THUMB',
+          imgThumb: null
+        });
+
+        let config = {
+          id: res.data.id,
+          theme: theme
+        };
+        axios.get('/stack', {params: config}).then(res => {
+          console.log('Successfully retrieved stack:', res);
+          //TODO: send stack over
+        }).catch(err => {
+          console.log('Error getting stack:', err);
+        });
+        console.log('photoID:', res.data.id);
+        console.log('theme', theme);
+        //endpoint to get stacks: '/stack'
+        //id: <photoID>, theme: <theme>
+
+        // redirect to carousel page...
         this.context.router.push('/carousel');
-      }).catch(err =>{
+
+      }).catch(err => {
         console.log('Error uploading photo:', err);
       });
     } else {
@@ -91,6 +127,15 @@ class UploadContainer extends React.Component {
     reader.readAsDataURL(file);
   }
 
+  selectTheme(theme, target) {
+    $('.theme').each(function() {
+      $(this).removeClass('selected');
+    });
+    $(target).toggleClass('selected');
+    $('#theme').text(theme);
+    console.log('theme inside selectTheme:', $('#theme').text());
+  }
+
   render() {
     let { hasAuth, imgThumb, file } = this.props;
     let $imagePreview = null;
@@ -99,18 +144,26 @@ class UploadContainer extends React.Component {
     } else {
       $imagePreview = (<div>Please select an Image for Preview</div>);
     }
-
     return (
       <div>
+        <div id="loader-wrapper">
+          <div id="loader"></div>
+          <div className="loader-section section-left"></div>
+          <div className="loader-section section-right"></div>
+        </div>
+
+        <p>Select a theme:</p>  
+        <img className='theme' title='love' src='../../images/love.png' onClick={(e) => this.selectTheme('love', e.target)} />
+        <img className='theme' title='ice cream' src='../../images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
+        <img className='theme' title='cats' src='../../images/cat.png' onClick={(e) => this.selectTheme('cats', e.target)} />
+        <img className='theme' title='ice cream' src='../../images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
+        <br />
+        
+        <p id='theme'></p>
+        
         <form onSubmit={(e) => this._handleSubmit(e)}>
-          <select id='theme' required>
-            <option value=''>select a theme...</option>
-            <option value="cats">cats</option>
-            <option value="love">love</option>
-            <option value="ice_cream">ice cream</option>
-          </select><br /> 
           <input type='file' onChange={(e)=>this._handleImageChange(e)} /><br />
-          <button type='submit' onClick={(e)=>this._handleSubmit(e)}>UPLOAD IMG</button>
+          <button type='submit'>UPLOAD IMG</button>
         </form>
         <div>
           {$imagePreview}
@@ -119,6 +172,7 @@ class UploadContainer extends React.Component {
     );
   }
 }
+
 
 const mapStateToProps = function(store) {
   return {
@@ -130,3 +184,14 @@ const mapStateToProps = function(store) {
   
 export default connect(mapStateToProps)(UploadContainer);
 //React.render(<ImageUpload/>, document.getElementById("mainApp"));
+
+        // <form onSubmit={(e) => this._handleSubmit(e)}>
+        //   <select id='theme' required>
+        //     <option value=''>select a theme...</option>
+        //     <option value="cats">cats</option>
+        //     <option value="love">love</option>
+        //     <option value="ice_cream">ice cream</option>
+        //   </select><br /> 
+        //   <input type='file' onChange={(e)=>this._handleImageChange(e)} /><br />
+        //   <button type='submit' onClick={(e)=>this._handleSubmit(e)}>UPLOAD IMG</button>
+        // </form>
