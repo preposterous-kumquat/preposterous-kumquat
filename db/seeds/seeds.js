@@ -3,14 +3,18 @@ const bcrypt = require('bcrypt-nodejs');
 const geohash = require('ngeohash');
 const async = require('async');
 const travelPhotos = require('./travelPhotos.js');
-const sendToCurator = require('../../server/config/helpers.js').sendToCurator;
+const sendToCurator = require('../../server/controllers/photo.controllers.js').sendToCurator;
+const countries = require('../../server/countries/countriesJSON');
 
 const defaultUser = {
   email: 'kumquat@gmail.com',
   name: 'Kumquat Jr',
   password: '123',
-  default_loc: geohash.encode(37.773972, -122.431297)
+  defaultLat: countries['United States'].lat,
+  defaultLong: countries['United States'].long
 };
+
+console.log(defaultUser.defaultLong)
 
 const theme = {
   travel: 'Travel'
@@ -30,6 +34,8 @@ let gatherKeywords = (themeArray) => {
   return uniqueKeywords; 
 };
 
+
+
 async.parallel({
   user: (callback) => {
     bcrypt.hash(defaultUser.password, null, null, (err, hash) => {
@@ -37,13 +43,15 @@ async.parallel({
         email: defaultUser.email,
         full_name: defaultUser.name,
         password: hash,
-        default_loc: defaultUser.default_loc
+        defaultLat: defaultUser.defaultLat,
+        defaultLong: defaultUser.defaultLong
       }).then((user) => {
-        callback(null, user.dataValues.id);
+        callback(null, user);
       });
     });
   },
   travelTheme: (callback) => {
+
     db.Themes.create({
       theme: theme.travel 
     }).then((travelTheme) => {
@@ -54,8 +62,8 @@ async.parallel({
     let travelKeywords = gatherKeywords(travelPhotos);
     for (var i = 0; i < travelKeywords.length; i++) {
       if (i === travelKeywords.length - 1) {
-        db.Keywords.create({
-          keyword: travelKeywords[i]
+        db.Keywords.findOrCreate({where: 
+          {keyword: travelKeywords[i]}
         }).then(() => {
           callback();
         }).catch((err) => {
@@ -63,8 +71,8 @@ async.parallel({
         });
 
       } else {
-        db.Keywords.create({
-          keyword: travelKeywords[i]
+        db.Keywords.findOrCreate({where: 
+          {keyword: travelKeywords[i]}
         }).catch((err) => {
           console.log('Error: ', err);
         });
@@ -73,18 +81,23 @@ async.parallel({
   },
 }, 
 (err, results) => {
-  // console.log(results, 'RESULTS ');
-  let userId = results.user;
+  let userId = results.user.dataValues.id;
+  let userLat = results.user.dataValues.lat;
+  let userLong = results.user.dataValues.long;
   let themeId = results.travelTheme;
 
   travelPhotos.forEach((photo) => {
-    photo.geohash = photo.gps ? geohash.encode(photo.gps.lat, photo.gps.long) : photo.dataValues.geohash;
-
+    if (!photo.gps) {
+      photo.gps.lat = userLat;
+      photo.gps.long = userLong;
+    }
     /********** UNCOMMENT NEXT LINE IF YOU WANT TO SEND TO REDIS *********************/
     sendToCurator(photo);
 
     db.Photos.create({
       UserId: userId,
+      lat: photo.gps.lat,
+      long: photo.gps.long,
       geohash: photo.geohash,
       file_url: photo.url,
       ThemeId: themeId,
@@ -99,30 +112,12 @@ async.parallel({
             keywordList.push(keyword.id);
           });
           travelPhoto.addKeywords(keywordList);
-          console.log('COMPLETED!!!!!!!!!!!!');
         }).catch((err) => {
           console.log('ERROR: ', err);
         });
     });
   });
 });
-
-
-
-
-
-  //   photo.clarifaiKeywords.forEach((keyword) => {
-  //     models.Keywords.findOrCreate({where: {keyword: keyword}})
-  //       .then((keyword) => {
-  //         allKeywords.push(keyword[0].dataValues.id);
-  //       });
-  //   });
-  //   travelPhoto.addKeywords(allKeywords);
-  // }).catch((err) => {
-  //   console.log('PHOTO CREATION ERROR: ', err);
-  // });
-
-// db.Photoscreate()
 
 
 
@@ -162,49 +157,3 @@ async.parallel({
     // });
 
 
-
-// bcrypt.hash(defaultUser.password, null, null, (err, hash) => {
-//   db.Themes.create({
-//     theme: theme.travel 
-//   }).then((travelTheme) => {
-//     db.Users.create({
-//       email: defaultUser.email,
-//       full_name: defaultUser.name,
-//       password: hash,
-//       default_loc: defaultUser.default_loc
-//     }).then((defaultUser) => {
-//       let userID = defaultUser.dataValues.id;
-//       travelPhotos.forEach((photo) => {
-//         photo.geohash = photo.gps ? geohash.encode(photo.gps.lat, photo.gps.long) : photo.dataValues.geohash;
-//         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HIT I GOT THIS FAR', photo.geohash, travelTheme.dataValues.id);
-
-
-//         db.Photos.create({
-//           UserId: userID,
-//           geohash: photo.geohash,
-//           file_url: photo.url,
-//           ThemeId: travelTheme.dataValues.id,
-//         }).then((travelPhoto) => {
-//           let allKeywords = []; 
-//           photo.clarifaiKeywords.forEach((keyword) => {
-//             models.Keywords.findOrCreate({where: {keyword: keyword}})
-//               .then((keyword) => {
-//                 allKeywords.push(keyword[0].dataValues.id);
-//               });
-//           });
-//           travelPhoto.addKeywords(allKeywords);
-//         }).catch((err) => {
-//           console.log('PHOTO CREATION ERROR: ', err);
-//         });
-
-
-
-
-//       });
-
-//     }); 
-//   });
-// });
-
-
-// console.log(gatherKeywords(travelPhotos));

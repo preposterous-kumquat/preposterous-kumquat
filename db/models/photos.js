@@ -2,7 +2,8 @@
 module.exports = function(sequelize, DataTypes) {
   var Photos = sequelize.define('Photos', {
     file_url: DataTypes.STRING,
-    geohash: DataTypes.STRING
+    lat: DataTypes.FLOAT,
+    long: DataTypes.FLOAT
   }, {
     classMethods: {
       associate: function(models) {

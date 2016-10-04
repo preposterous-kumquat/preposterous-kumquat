@@ -5,6 +5,7 @@ module.exports = {
   },
   DEV: {
     main: 3000,
-    photoProcesser: 3001
+    photoProcessor: 'http://localhost:3001',
+    curator: 'http://localhost:3002'
   }
 };
