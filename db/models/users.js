@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     email: DataTypes.STRING,
     full_name: DataTypes.STRING,
     password: DataTypes.STRING,
-    default_loc: DataTypes.STRING,
+    defaultLat: DataTypes.FLOAT,
+    defaultLong: DataTypes.FLOAT,
     createdAt: DataTypes.DATE
   }, {
     classMethods: {
