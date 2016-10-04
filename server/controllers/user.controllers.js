@@ -63,7 +63,6 @@ function signup(req, res) {
 
 function login(req, res) {
   let data = req.body;
-  console.log('inside login>>>>>>>>>');
   models.Users.findOne({where: {email: data.email}})
     .then( (user) => {
       if (!user) {

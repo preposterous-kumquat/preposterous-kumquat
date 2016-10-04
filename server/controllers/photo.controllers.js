@@ -28,8 +28,6 @@ function sendToCurator (data) {
   request(options, (err, response, body) => {
     if (err) {
       console.log('Error: ', err);
-    } else {
-
     }
   });
 }
@@ -78,7 +76,8 @@ function getStack(seed, res) {
         long: photo.longitude
       };
     });
-    res.send(mapped);
+    console.log(mapped, 'MAPPPED OBJECT');
+    res.json(mapped);
   });
 };
 
@@ -112,8 +111,8 @@ function uploadPhoto(req, res) {
         sendToCuratorAsync(body)
           .then((stack)=> {
             fs.unlink(`${__dirname}/../../${file.path}`);
-            savePhoto(body);
-            res.json({curatorComplete: true});
+            // savePhoto(body);
+            res.json(body);
           });
       });
       r._form = form;     
