@@ -40,10 +40,12 @@ export default function(props) {
         $('#email').val('');
         $('#pw').val('');
       }}>
-        <input type="text" placeholder='Email Address' id='email' /><br/>
-        <input type="password" placeholder='Password' id='pw' /><br/>
-        <button type="submit"> LOGIN </button>
-        <Link to='/signup'><button>SIGN UP</button></Link>
+        <input className='form' type="text" placeholder='Email Address' id='email' /><br/>
+        <input className='form' type="password" placeholder='Password' id='pw' /><br/>
+        <div className='buttonContainer'>
+          <button className='submit' type="submit"> Log In </button>
+          <Link to='/signup'><button className='submit'> Sign Up </button></Link>
+        </div>
       </form>
     </div>
   );

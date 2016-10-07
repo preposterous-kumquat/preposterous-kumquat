@@ -25,34 +25,36 @@ class SignupContainer extends React.Component {
       'loc': loc,
       'pw': pw
     };
-    console.log(data);
-
     axios.post('/signup', data).then(res => {
-      console.log('res>>>>>', res.status);
       //on success - status 200
+      console.log('Signup Successful:', res.status);
+      //get user details
       axios.get('/user/details').then(res => {
-      //   store.dispatch({
-      //     type: 'USER_LIST_SUCCESS',
-      //     users: response.data
-      //   });
+        console.log('Successfully retrieved user details:', res);
+
+        //dispatch to toggle login state
         store.dispatch({
           type: 'USER_AUTH',
           hasAuth: true
         });
+        //dispatch to update user details
+        store.dispatch({
+          type: 'USER_NAME',
+          userName: res.data.full_name
+        });
+        store.dispatch({
+          type: 'USER_EMAIL',
+          userName: res.data.email
+        });
+
         this.context.router.push('/home');
+      }).catch(err => {
+        console.error('Error getting user details:', err);
       });
-      //dispatch to toggle login state
-      //dispatch to change user state
-      //reroute using context.router.push('/route')
     }).catch(err => {
       //on error - status 401
-
+      console.error('Error signing up:', err);
     });
-    // store.dispatch({
-    //   type: 'USER_AUTH',
-    //   hasAuth: true
-    // });
-    // this.context.router.push('/home');
   }
 
   render() {
