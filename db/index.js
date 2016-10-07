@@ -8,11 +8,12 @@ var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/migrations/config/config.json')[env];
 var db        = {};
 
-if (config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[config.use_env_variable]);
-} else {
-  var sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+// if (config) {
+//   var sequelize = new Sequelize(config.database, config.username, config.password, config);
+// } else {
+//   var sequelize = new Sequelize(config.database, config.username, config.password, config);
+// }
+var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/app', { logging: false });
 
 fs
   .readdirSync(__dirname + '/models')

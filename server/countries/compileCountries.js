@@ -5,7 +5,7 @@ const fs = require('fs');
 let allCountries = {};
 
 source.forEach((country) => {
-  allCountries[country.name] = {lat: country.latlng[0], long: country.latlng[0]};
+  allCountries[country.name] = {lat: country.latlng[0], long: country.latlng[1]};
 });
 
 console.log(allCountries);
