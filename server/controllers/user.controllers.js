@@ -43,8 +43,8 @@ function signup(req, res) {
             email: data.email,
             full_name: data.name,
             password: hash,
-            lat: countries[data.loc].lat,
-            long: countries[data.loc].long
+            defaultLat: countries[data.loc].lat,
+            defaultLong: countries[data.loc].long
           }).then( (newUser) => {
             console.log('user created successfully');
             module.exports.createSession(req, res, newUser);
