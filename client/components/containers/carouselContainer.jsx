@@ -28,7 +28,6 @@ class CarouselContainer extends React.Component {
       slideSpeed: 300,
       paginationSpeed: 400,
       singleItem: true,
-
       autoPlay: 2000,
       stopOnHover: true
  

@@ -40,6 +40,7 @@ class UploadContainer extends React.Component {
       this.context.router.push('/loading');
       //check for valid jpeg later...
 
+      //check for valid jpeg later...
       axios.post('/upload', formData).then(res => {
         console.log('Successfully uploaded photo:', res);
 
@@ -75,8 +76,6 @@ class UploadContainer extends React.Component {
         console.log('theme', theme);
         //endpoint to get stacks: '/stack'
         //id: <photoID>, theme: <theme>
-
-
       }).catch(err => {
         console.log('Error uploading photo:', err);
       });
@@ -138,11 +137,13 @@ class UploadContainer extends React.Component {
         <img className='theme' title='marriage' src='../../resources/images/marriage.png' onClick={(e) => this.selectTheme('marriage', e.target)} />
         <img className='theme' title='family' src='../../resources/images/family.png' onClick={(e) => this.selectTheme('family', e.target)} />
         <img className='theme' title='religion' src='../../resources/images/religion.png' onClick={(e) => this.selectTheme('religion', e.target)} />
+
         <br />
         <img className='theme' title='parenthood' src='../../resources/images/parenthood.png' onClick={(e) => this.selectTheme('parenthood', e.target)} />
         <img className='theme' title='adventure' src='../../resources/images/adventure.png' onClick={(e) => this.selectTheme('adventure', e.target)} />
         <img className='theme' title='sports' src='../../resources/images/sports.png' onClick={(e) => this.selectTheme('sports', e.target)} />
         <br />
+
         <img className='theme hide' title='love' src='../.../resources/images/love.png' onClick={(e) => this.selectTheme('love', e.target)} />
         <img className='theme hide' title='babies' src='../../resources/images/baby.png' onClick={(e) => this.selectTheme('babies', e.target)} />
         <img className='theme hide' title='ice cream' src='../../resources/images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
