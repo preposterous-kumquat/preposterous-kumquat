@@ -4,43 +4,10 @@ import UploadView from '../views/upload.jsx';
 import store from '../../store.jsx';
 import axios from 'axios';
 
-// class UploadContainer extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.uploadPhoto = this.uploadPhoto.bind(this);
-//   }
-
-//   uploadPhoto(img) {
-//     let reader = new FileReader();
-//     axios.post('/upload', img).then(res => {
-//       console.log('upload res>>>>>>>>>>', res);
-//     }).catch(err => {
-//       console.log('Error uploading photo:', err);
-//     });
-//   }
-
-//   render() {
-//     return (
-//       <UploadView uploadPhoto={this.uploadPhoto} />
-//     );
-//   }
-
-// }
-
-// const mapStateToProps = function(store) {
-//   return {
-//     //users: store.userState.users
-//   };
-// };
-
-// export default connect(mapStateToProps)(UploadContainer);
-
-//TODO: refactor to separate container and view
 class UploadContainer extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = {file: '',imagePreviewUrl: ''};
-    console.log('uploadContainer loaded');
+
   }
   
   //for context router to work
@@ -51,7 +18,7 @@ class UploadContainer extends React.Component {
   }
 
   componentDidMount() {
-    $('theme').on('click', function() {
+    $('.theme').on('click', function() {
       $(this).addClass('selected');
     });
   }
@@ -71,6 +38,7 @@ class UploadContainer extends React.Component {
       
       // redirect to loading page...
       this.context.router.push('/loading');
+      //check for valid jpeg later...
 
       axios.post('/upload', formData).then(res => {
         console.log('Successfully uploaded photo:', res);
@@ -87,7 +55,19 @@ class UploadContainer extends React.Component {
         };
         axios.get('/stack', {params: config}).then(res => {
           console.log('Successfully retrieved stack:', res);
-          //TODO: send stack over
+          let stack = [];
+          for (var key in res.data) {
+            stack.push(res.data[key]);
+          }
+          console.log('stack>>>>', stack);
+          //send stack over
+          store.dispatch({
+            type: 'IMG_STACK',
+            imgStack: stack
+          });
+          
+          // redirect to carousel page...
+          this.context.router.push('/carousel');
         }).catch(err => {
           console.log('Error getting stack:', err);
         });
@@ -96,8 +76,6 @@ class UploadContainer extends React.Component {
         //endpoint to get stacks: '/stack'
         //id: <photoID>, theme: <theme>
 
-        // redirect to carousel page...
-        this.context.router.push('/carousel');
 
       }).catch(err => {
         console.log('Error uploading photo:', err);
@@ -153,16 +131,28 @@ class UploadContainer extends React.Component {
         </div>
 
         <p>Select a theme:</p>  
-        <img className='theme' title='love' src='../../images/love.png' onClick={(e) => this.selectTheme('love', e.target)} />
-        <img className='theme' title='ice cream' src='../../images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
-        <img className='theme' title='cats' src='../../images/cat.png' onClick={(e) => this.selectTheme('cats', e.target)} />
-        <img className='theme' title='ice cream' src='../../images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
+        <img className='theme' title='mealtime' src='../../resources/images/mealtime.png' onClick={(e) => this.selectTheme('mealtime', e.target)} />
+        <img className='theme' title='friendship' src='../../resources/images/friendship.png' onClick={(e) => this.selectTheme('friendship', e.target)} />
+        <img className='theme' title='celebration' src='../../resources/images/celebration.png' onClick={(e) => this.selectTheme('celebration', e.target)} />
         <br />
+        <img className='theme' title='marriage' src='../../resources/images/marriage.png' onClick={(e) => this.selectTheme('marriage', e.target)} />
+        <img className='theme' title='family' src='../../resources/images/family.png' onClick={(e) => this.selectTheme('family', e.target)} />
+        <img className='theme' title='religion' src='../../resources/images/religion.png' onClick={(e) => this.selectTheme('religion', e.target)} />
+        <br />
+        <img className='theme' title='parenthood' src='../../resources/images/parenthood.png' onClick={(e) => this.selectTheme('parenthood', e.target)} />
+        <img className='theme' title='adventure' src='../../resources/images/adventure.png' onClick={(e) => this.selectTheme('adventure', e.target)} />
+        <img className='theme' title='sports' src='../../resources/images/sports.png' onClick={(e) => this.selectTheme('sports', e.target)} />
+        <br />
+        <img className='theme hide' title='love' src='../.../resources/images/love.png' onClick={(e) => this.selectTheme('love', e.target)} />
+        <img className='theme hide' title='babies' src='../../resources/images/baby.png' onClick={(e) => this.selectTheme('babies', e.target)} />
+        <img className='theme hide' title='ice cream' src='../../resources/images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
+        <img className='theme hide' title='cats' src='../../resources/images/cat.png' onClick={(e) => this.selectTheme('cats', e.target)} />
+        <img className='theme hide' title='nature' src='../../resources/images/nature.png' onClick={(e) => this.selectTheme('nature', e.target)} />
         
         <p id='theme'></p>
-        
+        <br />
         <form onSubmit={(e) => this._handleSubmit(e)}>
-          <input type='file' onChange={(e)=>this._handleImageChange(e)} /><br />
+          <input id='getFile' type='file' onChange={(e)=>this._handleImageChange(e)} /><br />
           <button type='submit'>UPLOAD IMG</button>
         </form>
         <div>

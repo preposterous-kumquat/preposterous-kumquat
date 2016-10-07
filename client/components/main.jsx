@@ -13,6 +13,19 @@ class MainContainer extends React.Component {
     //console.log("store.userState.isLoggedIn", store.userState.isLoggedIn);
     this.userSignout = this.userSignout.bind(this);
   }
+  componentDidMount() {
+    // $('#signupNav').on('mouseenter mouseleave', function() {
+    //   $(this).toggleClass('changeButtonColor');
+    // });
+    // $('button.btn.nav.text').on('mouseenter mouseleave', function() {
+    //   $(this).toggleClass('changeFontColor');
+    // });
+    
+    // $('#signinNav').on('mouseenter mouseleave', function() {
+    //   $(this).toggleClass('changeFontColor');
+    // });
+    //not sure if the bottom part matters
+  }
   userSignout() {
     this.props.dispatch({
       type: 'USER_AUTH',

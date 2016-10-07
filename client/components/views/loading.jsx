@@ -5,6 +5,6 @@ import { Link } from 'react-router';
 export default props => {
 
   return (
-    <center><div className="loader"></div></center>
+    <center><h3>loading...</h3><div className="loader"></div></center>
   );
 };

@@ -111,7 +111,7 @@ function uploadPhoto(req, res) {
         sendToCuratorAsync(body)
           .then((stack)=> {
             fs.unlink(`${__dirname}/../../${file.path}`);
-            // savePhoto(body);
+            savePhoto(body);
             res.json(body);
           });
       });
@@ -160,16 +160,19 @@ function validPhoto(req, res) {
 
 function photos (req, res) {
   let userID = req.session.user.id;
+  console.log('This is my user id in the GET /photos:', userID);
   models.Photos.findAll({ 
     where: {
       UserId: userID
     },
-    limit: 6,
+    // limit: 6,
     order: '"createdAt" DESC'
   }).then( (photos) => {
     res.send(photos);
     // workers.prepStacks(photos);
-  });
+  }).catch((err) => {
+    console.error('ERROR IN FIND ALL PHOTOS: ', err)
+  })
 } 
 
 
