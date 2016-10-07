@@ -1,38 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-export default props => (
-  <div className='contentBox'>
-    <nav className='navBar'>
-      <span>
-        <Link to='/signin' activeClassName="active">SIGN IN</Link>
-      </span>
-      <span> | </span>
-      <span>
-        <Link to='/signup' activeClassName="active">SIGN UP</Link>
-      </span>
-    </nav>
-    <main>
-      {props.children}
-    </main>
-  </div>
-);
+export default props => {
+  // $('#signupNav').on('mouseenter mouseleave', function() {
+  //   $(this).toggleClass('changeButtonColor');
+  // });
 
-// export default function(props) {
-//   return (
-// 		<div>
-// 			<nav className='navBar'>
-//         <span>
-//           <Link to='/signin' activeClassName="active">SIGN IN</Link>
-//         </span>
-//         <span> | </span>
-//         <span>
-//           <Link to='/signup' activeClassName="active">SIGN UP</Link>
-//         </span>
-// 			</nav>
-//       <main>
-//         {props.children}
-//       </main>
-// 		</div>
-// 	);
-// }
+  // $('#signinNav').on('mouseenter mouseleave', function() {
+  //   $(this).toggleClass('changeFontColor');
+  // });
+  $('button.btn.nav.text').on('mouseenter mouseleave', function() {
+    $(this).toggleClass('changeFontColor');
+  });
+  return (
+    <div className='contentBox'>
+      <nav className='navBar'>
+
+        <Link to='/signin' activeClassName="active">
+          <button id='signinNav' className='btn nav text'>Log In</button>
+        </Link>
+        <Link to='/signup' activeClassName="active">
+          <button id='signupNav' className='btn nav pop'>Join Our Community</button>
+        </Link>
+      </nav>
+
+      <main>
+        <center>{props.children}</center>
+      </main>
+    </div>
+  );
+};
+
+

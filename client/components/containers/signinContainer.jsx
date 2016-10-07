@@ -9,8 +9,10 @@ import axios from 'axios';
 class SigninContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.userSignin = this.userSignin.bind(this);
 
+    //method bindings
+    this.userSignin = this.userSignin.bind(this);
+    this.getUserPhotos = this.getUserPhotos.bind(this);
   }
 
   //for context router to work
@@ -33,31 +35,36 @@ class SigninContainer extends React.Component {
       'email': email,
       'pw': pw
     };
-    console.log('inside userSignin');
     axios.post('/login', data).then(res => {
-      console.log('res.status>>>>>', res.status);
+      console.log('Signin Successful:', res.status);
+      //on success - status 200
       if (res.status === 200) {
         axios.get('/user/details').then(res => {
-        //dispatch to change user state
-        // store.dispatch({
-        //   type: 'USER_LIST_SUCCESS',
-        //   users: response.data
-        // });
-        // this.context.router.push('/home');
+          console.log('Successfully retrieved user details:', res);
+          //dispatch to toggle login state
           store.dispatch({
             type: 'USER_AUTH',
             hasAuth: true
           });
+          //dispatch to update user details
+          store.dispatch({
+            type: 'USER_NAME',
+            userName: res.data.full_name
+          });
+          store.dispatch({
+            type: 'USER_EMAIL',
+            userName: res.data.email
+          });
+
           this.context.router.push('/home');
+        }).catch(err => {
+          console.error('Error getting user details:', err);
         });
       }
-      
+    }).catch(err => {
+      //on error - status 401
+      console.error('Error signing in:', err);
     });
-    // store.dispatch({
-    //   type: 'USER_AUTH',
-    //   hasAuth: true
-    // });
-    // this.context.router.push('/home');
   }
 
   render() {
@@ -70,7 +77,7 @@ class SigninContainer extends React.Component {
 
 const mapStateToProps = function(store) {
   return {
-    //users: store.userState.users
+    // userName: store.userState.userName
   };
 };
 
