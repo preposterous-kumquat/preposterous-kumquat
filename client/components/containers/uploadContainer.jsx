@@ -38,8 +38,8 @@ class UploadContainer extends React.Component {
       
       // redirect to loading page...
       this.context.router.push('/loading');
-      //check for valid jpeg later...
 
+      //check for valid jpeg later...
       axios.post('/upload', formData).then(res => {
         console.log('Successfully uploaded photo:', res);
 
@@ -55,6 +55,7 @@ class UploadContainer extends React.Component {
         };
         axios.get('/stack', {params: config}).then(res => {
           console.log('Successfully retrieved stack:', res);
+
           let stack = [];
           for (var key in res.data) {
             stack.push(res.data[key]);
@@ -75,7 +76,6 @@ class UploadContainer extends React.Component {
         console.log('theme', theme);
         //endpoint to get stacks: '/stack'
         //id: <photoID>, theme: <theme>
-
 
       }).catch(err => {
         console.log('Error uploading photo:', err);

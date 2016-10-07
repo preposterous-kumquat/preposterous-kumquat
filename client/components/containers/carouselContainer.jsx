@@ -15,6 +15,7 @@ class CarouselContainer extends React.Component {
     };
   }
 
+
   componentWillMount() {
     $('body').addClass('loaded');
   }
