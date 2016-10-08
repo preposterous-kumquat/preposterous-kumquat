@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/",
+    "start": "./wait-for-it.sh db:5432 -t 10 && nodemon server/",
     "babel": "babel",
     "webpack": "webpack"
   },
