@@ -81,8 +81,7 @@ function getStack(seed, res) {
     console.log(mapped, 'MAPPPED OBJECT');
     res.json(mapped);
   });
-};
-
+}
 
 function uploadPhoto(req, res) {
   if (req.file) {
@@ -177,6 +176,7 @@ function photos (req, res) {
   });
 } 
 
+// DOES NOT CHECK FOR IF PHOTOS ARE IN THE SYSTEM
 function createPair(req, res) {
   // SORT THE ORDER OF PHOTO ID, SO FIRST PHOTO HAS THE LOWER INDEX
   let pair = [req.query.pair1, req.query.pair2]
@@ -194,7 +194,6 @@ function createPair(req, res) {
   }).then((firstPhoto) => {
 
     // FIND ALL PAIRS FOR FIRST PHOTO
-
     let allMatches = [];
 
     // GENERATE AN ARRAY OF ALL OF PAIR 1'S PAIR'S ID's
@@ -206,46 +205,22 @@ function createPair(req, res) {
 
         models.Photos.findOne({where: {id: pair[1]}
           }).then((secondPhoto) => {
+            // IF MATCH DOES NOT EXIST CREATE PAIR
             if ( allMatches.indexOf(+pair[1]) === -1 ) {
               firstPhoto.addPair(secondPhoto);
             } 
+
+            // SENDING BACK PAIR
             res.json({
               theme: firstPhoto.Theme.dataValues.theme,
               pair1: formatPhotoModel(firstPhoto),
               pair2: formatPhotoModel(secondPhoto)
             });
-          });
+          });    
 
-        // IF THE PAIR DOES NOT EXIST CREATE PAIR
-        
       });
-
-
   });
 }
-
-
-
-
-
-    //   models.Photos.findOne({where: {id: pair2}
-    //   }).then((pair2) => {
-    //     console.log(pair2, 'First photo');
-    //     pair1.addPair(pair2);
-    //     console.log('Added my pair');
-
-    //     pair1.getPair().then((results) => {
-    //       console.log('GETTING MY PAIR', pair1, 'MY PAIR 888888888888', results[0].Pairs, '^^^^^^^^^^^^^^^^^^', results[1].Pairs);
-    //       results.forEach((pair) => {
-    //         console.log(pair.Pairs.PairId, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
-    //       });
-    //     });
-    //   });
-    // }).catch(() => {
-    //   console.log('Error: ', err);
-
-
-
 
 function getPairs(req, res) {
   models.Pairs.findAll({
@@ -280,13 +255,15 @@ function getPairs(req, res) {
 let findPair = (pairIds) => {
   return new Promise((resolve, reject) => {
     models.Photos.findAll({
-      where: {
-        $or: [
+      where: { $or: [
           {id: pairIds}
-        ]
-      }
+        ]},
+      include: [
+        {model: models.Themes}
+      ]
     }).then((photos) => {
       resolve({
+        theme: photos[0].Theme.dataValues.theme,
         pair1: formatPhotoModel(photos[0]),
         pair2: formatPhotoModel(photos[1])
       });
@@ -306,192 +283,3 @@ let formatPhotoModel = (photo) => {
 };
 
 
-
-
-// resolve({ 
-//   pair1: {
-//     id: photos[0].dataValues.id,
-//     file_url: photos[0].dataValues.file_url,
-//     lat: photos[0].dataValues.lat,
-//     long: photos[0].dataValues.long,
-//   }, 
-//   pair2: {
-//     id: photos[1].dataValues.id,
-//     file_url: photos[1].dataValues.file_url,
-//     lat: photos[1].dataValues.lat,
-//     long: photos[1].dataValues.long,
-//   }
-// });
-
-
-// [ { dataValues:
-//      { id: 1,
-//        file_url: 'https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/004/000000000004.jpg',
-//        lat: 46.3165841818283,
-//        long: 11.42578125,
-//        createdAt: 2016-10-08T19:21:59.694Z,
-//        updatedAt: 2016-10-08T19:21:59.694Z,
-//        UserId: 1,
-//        ThemeId: 1,
-//        Pairs: [Object] },
-//     _previousDataValues:
-//      { id: 1,
-//        file_url: 'https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/004/000000000004.jpg',
-//        lat: 46.3165841818283,
-//        long: 11.42578125,
-//        createdAt: 2016-10-08T19:21:59.694Z,
-//        updatedAt: 2016-10-08T19:21:59.694Z,
-//        UserId: 1,
-//        ThemeId: 1,
-//        Pairs: [Object] },
-//     _changed: {},
-//     '$modelOptions':
-//      { timestamps: true,
-//        instanceMethods: {},
-//        classMethods: [Object],
-//        validate: {},
-//        freezeTableName: false,
-//        underscored: false,
-//        underscoredAll: false,
-//        paranoid: false,
-//        rejectOnEmpty: false,
-//        whereCollection: [Object],
-//        schema: null,
-//        schemaDelimiter: '',
-//        defaultScope: {},
-//        scopes: [],
-//        hooks: {},
-//        indexes: [],
-//        name: [Object],
-//        omitNul: false,
-//        sequelize: [Object],
-//        uniqueKeys: {},
-//        hasPrimaryKeys: true },
-//     '$options':
-//      { isNewRecord: false,
-//        '$schema': null,
-//        '$schemaDelimiter': '',
-//        include: [Object],
-//        includeNames: [Object],
-//        includeMap: [Object],
-//        includeValidated: true,
-//        attributes: [Object],
-//        raw: true },
-//     hasPrimaryKeys: true,
-//     __eagerlyLoadedAssociations: [],
-//     isNewRecord: false,
-//     Pairs:
-//      { dataValues: [Object],
-//        _previousDataValues: [Object],
-//        _changed: {},
-//        '$modelOptions': [Object],
-//        '$options': [Object],
-//        hasPrimaryKeys: true,
-//        __eagerlyLoadedAssociations: [],
-//        isNewRecord: false } },
-//   { dataValues:
-//      { id: 6,
-//        file_url: 'https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/006/000000000006.jpg',
-//        lat: 50.7364551370124,
-//        long: 79.62890625,
-//        createdAt: 2016-10-08T19:21:59.695Z,
-//        updatedAt: 2016-10-08T19:21:59.695Z,
-//        UserId: 1,
-//        ThemeId: 1,
-//        Pairs: [Object] },
-//     _previousDataValues:
-//      { id: 6,
-//        file_url: 'https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/006/000000000006.jpg',
-//        lat: 50.7364551370124,
-//        long: 79.62890625,
-//        createdAt: 2016-10-08T19:21:59.695Z,
-//        updatedAt: 2016-10-08T19:21:59.695Z,
-//        UserId: 1,
-//        ThemeId: 1,
-//        Pairs: [Object] },
-//     _changed: {},
-//     '$modelOptions':
-//      { timestamps: true,
-//        instanceMethods: {},
-//        classMethods: [Object],
-//        validate: {},
-//        freezeTableName: false,
-//        underscored: false,
-//        underscoredAll: false,
-//        paranoid: false,
-//        rejectOnEmpty: false,
-//        whereCollection: [Object],
-//        schema: null,
-//        schemaDelimiter: '',
-//        defaultScope: {},
-//        scopes: [],
-//        hooks: {},
-//        indexes: [],
-//        name: [Object],
-//        omitNul: false,
-//        sequelize: [Object],
-//        uniqueKeys: {},
-//        hasPrimaryKeys: true },
-//     '$options':
-//      { isNewRecord: false,
-//        '$schema': null,
-//        '$schemaDelimiter': '',
-//        include: [Object],
-//        includeNames: [Object],
-//        includeMap: [Object],
-//        includeValidated: true,
-//        attributes: [Object],
-//        raw: true },
-//     hasPrimaryKeys: true,
-//     __eagerlyLoadedAssociations: [],
-//     isNewRecord: false,
-//     Pairs:
-//      { dataValues: [Object],
-//        _previousDataValues: [Object],
-//        _changed: {},
-//        '$modelOptions': [Object],
-//        '$options': [Object],
-//        hasPrimaryKeys: true,
-//        __eagerlyLoadedAssociations: [],
-//        isNewRecord: false } } ]
-
-
-// var photoIds = [result[0].dataValues.PairId, result[0].dataValues.PhotoId];
-
-
-
-
-//   result.forEach((pair) => {
-//     console.log(pair.dataValues, 'THE FOR EACH');
-//     let currentPairIds = [pair.dataValues.PairId, pair.dataValues.PhotoId];
-//     console.log(currentPairIds, 'PAIR ARRAY');
-//     models.Photos.findAll({
-//       where: {
-//         $or: [
-//           {id: currentPairIds}
-//         ]
-//       }
-//     }).then((photos) => {
-//       console.log(photos, 'BACK');
-//       recentPairs.push({ 
-//         pair1: {
-//           file_url: photos[0].dataValues.file_url,
-//           lat: photos[0].dataValues.lat,
-//           long: photos[0].dataValues.long,
-//         }, 
-//         pair2: {
-//           file_url: photos[1].dataValues.file_url,
-//           lat: photos[1].dataValues.lat,
-//           long: photos[1].dataValues.long,
-//         }
-//       });
-//       console.log(recentPairs, 'PAIRS');
-//     });
-//   });
-
-//   return recentPairs;
-// }).then((allPairs) => {
-//   res.json(allPairs);
-// }).catch((err) => {
-//   console.log('Error: ', err);
-// });
