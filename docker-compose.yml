@@ -1,0 +1,41 @@
+version: '2'
+services:
+  main:
+    image: app
+    ports:
+      - "3000:3000"
+    links:
+      - db
+      - photo-processor
+      - curator
+    environment:
+      DATABASE_URL: postgres://docker:docker@db:5432/app
+      PHOTO_PROCESSOR: photo-processor:3001
+      CURATOR: curator:3002
+    depends_on:
+      - "db"
+    volumes:
+      - .:/usr/src/app
+  db:
+    image: postgres
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: app
+  photo-processor: 
+    image: photo-processor:0.1
+    expose:
+      - "3001"
+  curator:
+    image: curator:0.1
+    expose:
+      - "3002"
+    depends_on:
+      - "redis"
+    environment:
+      NODE_ENV: PROD
+  redis:
+    image: redis
+
