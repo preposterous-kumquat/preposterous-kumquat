@@ -14,7 +14,7 @@ const defaultUser = {
   defaultLong: countries['United States'].long
 };
 
-console.log(defaultUser.defaultLong);
+console.log(defaultUser.defaultLong)
 
 const theme = {
   travel: 'Travel'

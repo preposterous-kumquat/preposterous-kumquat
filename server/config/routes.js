@@ -48,6 +48,18 @@ module.exports = (app, express) => {
     photos.validPhoto(req, res);
   });
 
+// CREATE A PAIR
+  app.post('/createPair', (req, res)=> {
+    console.log('REST', req.query);
+    photos.createPair(req, res);
+  });
+
+  // GET A PAIRS
+    app.get('/getPairs', (req, res)=> {
+      console.log('REST', req.query);
+      photos.getPairs(req, res);
+    });
+
 // GET THUMBNAILS
   app.get('/photos', users.requireLogin, (req, res) => {
     photos.photos(req, res);
