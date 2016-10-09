@@ -103,6 +103,7 @@ function uploadPhoto(req, res) {
       });
 
       var r = request.post(`${config.photoProcessor}/photoProcessor/upload/${photoId}`, (err, response, body) => {
+      // var r = request.post(`photo-processor/photoProcessor/upload/${photoId}`, (err, response, body) => {
         body = JSON.parse(body);
         if (!body.gps) {
           body.gps = {};
@@ -257,7 +258,8 @@ let findPair = (pairIds) => {
     models.Photos.findAll({
       where: { $or: [
           {id: pairIds}
-        ]},
+        ]
+      },
       include: [
         {model: models.Themes}
       ]
