@@ -41,6 +41,5 @@ services:
     image: redis
   simserver:
     image: simserver:0.1
-    expose: 
-    - "5000"
-
+    ports: 
+    - "5000:5000"
