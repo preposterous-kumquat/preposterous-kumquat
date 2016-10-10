@@ -26,7 +26,8 @@ a:link {
 	border-bottom: 1px solid #A9A9A9;
 }
 
-button.btn.nav {
+button.btn.nav,
+button.pairButton {
 	border: 0;
 	border-radius: 5px;
 	padding: 8px;
@@ -38,7 +39,12 @@ button.btn.nav {
 /*	background-color: none;*/
 }
 
-button.btn.nav.pop {
+button.pairButton {
+	margin-bottom: 6px;
+}
+
+button.btn.nav.pop,
+button.pairButton {
 	/*border: 1px solid #A9A9A9;*/
 	background-color: #CAEBF2;
 	color: #444444;
@@ -55,7 +61,8 @@ button.btn.nav.text.changeFontColor {
 button.btn.nav.text:hover {
 	color: #FF3C80;
 }
-button.btn.nav.pop:hover {
+button.btn.nav.pop:hover,
+button.pairButton:hover {
 	background-color: #FF3C80;
 }
 
@@ -309,8 +316,8 @@ div.homeContainer {
 	display: flex;
 	flex-wrap: wrap;
 	/*flex-direction: row;*/
-	justify-content: center;
-	margin: 30px;
+	justify-content: flex-start;
+  margin: 30px 30px 30px 50px;
 	width: 90%;
 }
 
@@ -354,17 +361,20 @@ span.picContainerFilm {
 }
 
 span.picContainerFilm:hover {
-	outline: 3px solid #FF3C80;
+	/*outline: 3px solid #FF3C80;*/
+	/*background-color: #FF3C80;*/
+	background-color: rgba(255, 251, 0, .5);
 }
 
 .filmStripPic {
 	width: 170px;
 	margin: 3px;
+	border: 1px solid white;
 }
 
 .mainContent {
 	width: 85%;
-	background-color: #CAEBF2;
+	/*background-color: #CAEBF2;*/
 }
 
 .allContent {
@@ -375,13 +385,21 @@ span.picContainerFilm:hover {
 .pairView {
 	display: flex;
 	justify-content: center;
+	border: 1px solid #EFEFEF;
 }
 
 #pairPic1, #pairPic2 {
 	/*display: flex;*/
   max-height: 400px;
   max-width: 95%;
-  /*border: 3px solid white;*/
+  border: 1px solid white;
+}
+
+#pairPic1:hover {
+	outline: 3px solid rgba(255, 60, 128, .7);
+}
+#pairPic2:hover {
+	outline: 3px solid rgba(255, 251, 0, .7);
 }
 
 .picBox {
@@ -396,7 +414,9 @@ img#googleMap {
 	width: 100%;
 }
 
-
+/*img .emptyText {
+	background-color: #CAEBF2;
+}*/
 
 
 

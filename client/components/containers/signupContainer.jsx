@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import SignupView from '../views/signup.jsx';
-// import store from '../../store.jsx';
 import axios from 'axios';
+// import store from '../../store.jsx';
 //import { Router } from 'react-router';
 
 class SignupContainer extends React.Component {

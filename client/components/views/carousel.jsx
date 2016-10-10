@@ -5,13 +5,14 @@ import LoadingView from './loading.jsx';
 
 // Using "Stateless Functional Components"
 export default function(props) {
-  let { stack, pairPic1, pairPic2, appendPhoto, removePhoto } = props;
+  let { stack, pairPic1, pairPic2, appendPhoto, removePhoto, createPair } = props;
 
   console.log('inside carousel view>>>>>', stack);
   console.log('pair PIC 1 >>>', pairPic1);
   console.log('pair PIC 2 >>>', pairPic2);
   console.log('appendPhoto>>>', appendPhoto);
-  let defaultLoc = 'center=37.783697,-122.408966&zoom=1';
+  let defaultLoc = 'center=12.2,8.6&zoom=1';
+  // let defaultLoc = 'center=37.783697,-122.408966&zoom=1';
   let marker = {
     c1: '0xFF3C80',
     c2: '0xFFFB00',
@@ -20,11 +21,19 @@ export default function(props) {
   };
   const marker1 = 'markers=color:' + marker.c1 + '%7Clabel:A%7C' + marker.m1;
   const marker2 = 'markers=color:' + marker.c2 + '%7Clabel:B%7C' + marker.m2;
-  const markerChoice =
+  let markerChoice =
     !(pairPic1.lat || pairPic2.lat) ? defaultLoc :
     !pairPic1.lat ? marker2 :
     !pairPic2.lat ? marker1 :
     marker1 + '&' + marker2;
+
+  if (pairPic1.lat !== undefined && pairPic2.lat !== undefined && 
+      pairPic1.lat === pairPic2.lat && pairPic1.long === pairPic2.long) {
+    markerChoice += '&zoom=4';
+  }
+  if ((pairPic1.lat === undefined && pairPic2.lat !== undefined) || (pairPic2.lat === undefined && pairPic1.lat !== undefined)) {
+    markerChoice += '&zoom=4';
+  }
   /*if (!(pairPic1.lat || pairPic2.lat)) {
     markerChoice = defaultLoc;
   } else if (!pairPic1.lat) {
@@ -34,6 +43,14 @@ export default function(props) {
   } else {
     markerChoice = marker1 + marker2;
   }*/
+  // let display = <p>Select two photos to create a pair.</p>;
+  // if (!(pairPic1.lat || pairPic2.lat)) {
+  //   display = <img id='pairPic1' src={pairPic1.url} onClick={(e) => removePhoto(1)} />;
+  // }
+
+  let display = !(pairPic1.lat || pairPic2.lat)
+    ? <p id='emptyText'>Select two photos to create a pair.</p>
+    : <img id='pairPic1' src={pairPic1.url} onClick={(e) => removePhoto(1)} />;
 
   // IIFE: immediately invoked function expression
 
@@ -46,12 +63,17 @@ export default function(props) {
     style: 'style=feature:road|color:0xffffff|visibility:simplified',
     apikey: 'key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI'
   };
+
+  console.log('display', display);
   // if ()
-  let sampleMap = 'https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&scale=2&size=600x230&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:0xFFFB00%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI';
+  // let sampleMap = 'https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&scale=2&size=600x230&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:0xFFFB00%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI';
   let googleMap = map.url + map.size + '&' + map.scale + '&' + map.markers + '&' + map.style + '&' + map.apikey;
   return (
     <div className='allContent'>
       <div className='filmStrip'>
+        <span id='pairSpan' onClick={(e) => createPair(pairPic1, pairPic2)} >
+          <button className='pairButton'>Create Photo Pairing</button>
+        </span>
         {stack.map((pic, i) => (
           <span className='picContainerFilm' onClick={(e) => appendPhoto(pic)} key={i} >
             <img className='filmStripPic' src={pic.url} />
@@ -61,7 +83,7 @@ export default function(props) {
       <div className='mainContent'>
         <div className='pairView'>
           <span className='picBox'>
-            <img id='pairPic1' src={pairPic1.url} onClick={(e) => removePhoto(1)} />
+            {display}
           </span>
           <span className='picBox'>
             <img id='pairPic2' src={pairPic2.url} onClick={(e) => removePhoto(2)} />
