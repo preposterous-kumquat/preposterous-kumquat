@@ -16,7 +16,9 @@ module.exports = {
   uploadPhoto,
   photos,
   stack,
-  validPhoto
+  validPhoto,
+  createPair,
+  getPairs
 };
 
 function sendToCurator (data) {
@@ -79,8 +81,7 @@ function getStack(seed, res) {
     console.log(mapped, 'MAPPPED OBJECT');
     res.json(mapped);
   });
-};
-
+}
 
 function uploadPhoto(req, res) {
   if (req.file) {
@@ -102,6 +103,7 @@ function uploadPhoto(req, res) {
       });
 
       var r = request.post(`${config.photoProcessor}/photoProcessor/upload/${photoId}`, (err, response, body) => {
+      // var r = request.post(`photo-processor/photoProcessor/upload/${photoId}`, (err, response, body) => {
         body = JSON.parse(body);
         if (!body.gps) {
           body.gps = {};
@@ -171,8 +173,115 @@ function photos (req, res) {
     res.send(photos);
     // workers.prepStacks(photos);
   }).catch((err) => {
-    console.error('ERROR IN FIND ALL PHOTOS: ', err)
-  })
+    console.error('ERROR IN FIND ALL PHOTOS: ', err);
+  });
 } 
+
+// DOES NOT CHECK FOR IF PHOTOS ARE IN THE SYSTEM
+function createPair(req, res) {
+  // SORT THE ORDER OF PHOTO ID, SO FIRST PHOTO HAS THE LOWER INDEX
+  let pair = [req.query.pair1, req.query.pair2]
+                .sort((a, b) => {
+                  return a - b;
+                });
+
+  // QUERY FOR FIRST PHOTO
+  models.Photos.findOne({
+    where: 
+      {id: pair[0]},
+    include: [
+      {model: models.Themes}
+    ]
+  }).then((firstPhoto) => {
+
+    // FIND ALL PAIRS FOR FIRST PHOTO
+    let allMatches = [];
+
+    // GENERATE AN ARRAY OF ALL OF PAIR 1'S PAIR'S ID's
+    firstPhoto.getPair()
+      .then((matches) => {
+        matches.forEach((pair) => {
+          allMatches.push(pair.Pairs.PairId);
+        });
+
+        models.Photos.findOne({where: {id: pair[1]}
+          }).then((secondPhoto) => {
+            // IF MATCH DOES NOT EXIST CREATE PAIR
+            if ( allMatches.indexOf(+pair[1]) === -1 ) {
+              firstPhoto.addPair(secondPhoto);
+            } 
+
+            // SENDING BACK PAIR
+            res.json({
+              theme: firstPhoto.Theme.dataValues.theme,
+              pair1: formatPhotoModel(firstPhoto),
+              pair2: formatPhotoModel(secondPhoto)
+            });
+          });    
+
+      });
+  });
+}
+
+function getPairs(req, res) {
+  models.Pairs.findAll({
+    limit: 5,
+    order: '"createdAt" DESC'
+  }).then((result) => {
+    let recentPairs = [];
+
+    result.forEach((pair) => {
+      recentPairs.push(
+        [pair.dataValues.PairId, pair.dataValues.PhotoId]
+          .sort((a, b) => {
+            return a - b;
+          })
+      );
+    });
+
+    let actions = recentPairs.map(findPair);
+    let results = Promise.all(actions);
+
+    results.then((allPairs) => {
+      res.json(allPairs);
+    }).catch((err) => {
+      console.log('Error 1: ', err);
+    });
+  }).catch((err) => {
+    console.log('Error 2: ', err);
+  });
+}
+
+
+let findPair = (pairIds) => {
+  return new Promise((resolve, reject) => {
+    models.Photos.findAll({
+      where: { $or: [
+          {id: pairIds}
+        ]
+      },
+      include: [
+        {model: models.Themes}
+      ]
+    }).then((photos) => {
+      resolve({
+        theme: photos[0].Theme.dataValues.theme,
+        pair1: formatPhotoModel(photos[0]),
+        pair2: formatPhotoModel(photos[1])
+      });
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+};
+
+let formatPhotoModel = (photo) => {
+  return {
+    id: photo.dataValues.id,
+    file_url: photo.dataValues.file_url,
+    lat: photo.dataValues.lat,
+    long: photo.dataValues.long,
+  };
+};
 
 
