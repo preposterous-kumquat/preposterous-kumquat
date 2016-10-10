@@ -1,4 +1,5 @@
-const config = process.env.NODE_ENV === 'PROD' ? require('../config/config.js').PROD : require('../config/config.js').DEV;
+// const config = process.env.NODE_ENV === 'PROD' ? require('../config/config.js').PROD : require('../config/config.js').DEV;
+const config = require('../config/config.js').LOCAL
 const models = require('../../db/index');
 const request = require('request');
 const multiparty = require('multiparty');
@@ -94,7 +95,6 @@ function getStack(seed, res) {
     var mapped = {};
     let parsed = JSON.parse(body);
     parsed.forEach( (photo, idx) => {
-      console.log(photo, 'this is the current photo');
       mapped[idx] = {
         id: photo.key,
         url: photo.url,
@@ -102,7 +102,6 @@ function getStack(seed, res) {
         long: photo.longitude
       };
     });
-    console.log(mapped, 'MAPPPED OBJECT');
     res.json(mapped);
   });
 }
@@ -162,22 +161,52 @@ function savePhoto(body) {
       return photo;
     })
     .then((photo) => {
-      let keywordsPK = [];
-      body.clarifaiKeywords.forEach((keyword) => {
-        models.Keywords.findOrCreate({where: {keyword: keyword}})
-          .then((keyword) => {
-            keywordsPK.push(keyword[0].dataValues.id);
-          })
-          .then(() => {
-            return photo.addKeywords(keywordsPK);
-          })
-          .catch((err) => {
-            console.log('ERROR: ', err);
-          });
+      let actions = body.clarifaiKeywords.map(findKeyword);
+      let results = Promise.all(actions);
+      results.then((allKeywords) => {
+        photo.addKeywords(allKeywords);
       });
-    }).catch((err) => {
-      console.error('ERROR: ', err);
-    }); 
+    })
+    .catch((err) => {
+      console.log('Could not find photo, error: ', err);
+    });
+}
+
+
+
+
+//   body.clarifaiKeywords.forEach((keyword) => {
+//     models.Keywords.findOrCreate({where: {keyword: keyword}})
+//       .then((keyword) => {
+//         keywordsPK.push(keyword[0].dataValues.id);
+//       })
+//       .then(() => {
+//         console.log(keywordsPK, 'ALL THE KEYWORDS');
+//         return photo.addKeywords(keywordsPK);
+
+//       })
+//       .catch((err) => {
+//         console.log('ERROR: ', err);
+//       });
+//   });
+// }).catch((err) => {
+//   console.error('ERROR: ', err);
+// }); 
+
+
+
+
+function findKeyword(keyword) {
+  return new Promise((resolve, reject) => {
+    models.Keywords.findOrCreate({where: {keyword: keyword}})
+      .then((keyword) => {
+        // console.log(keyword, 'MY KEYWORD FOUND', keyword[0].dataValues.id, 'KEYWORD ID =========================');
+        resolve(keyword[0].dataValues.id);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 function validPhoto(req, res) {

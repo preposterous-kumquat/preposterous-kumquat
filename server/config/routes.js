@@ -49,7 +49,7 @@ module.exports = (app, express) => {
   });
 
 // CREATE A PAIR
-  app.post('/createPair', (req, res)=> {
+  app.post('/createPair', users.requireLogin, (req, res)=> {
     console.log('REST', req.query);
     photos.createPair(req, res);
   });
