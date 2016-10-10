@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import UploadView from '../views/upload.jsx';
-import store from '../../store.jsx';
+// import store from '../../store.jsx';
 import axios from 'axios';
 
 class UploadContainer extends React.Component {
@@ -26,26 +26,29 @@ class UploadContainer extends React.Component {
   _handleSubmit(e) {
     e.preventDefault();
     var formData = new FormData();
-    var userPhoto = new Blob([this.props.file], { type: 'image/png'});
+    var userPhoto = new Blob([this.props.file], {type: 'image/png'});
     // var theme = $('#theme').val();
     var theme = $('#theme').text();
     console.log('theme>>>>>', theme);
     formData.append('photo', userPhoto);
     formData.append('theme', theme);
 
-    if (theme) {
+    if (!this.props.file) {
+      alert('Please choose a file.');
+    } else if (!theme) {
+      alert('Please select a theme.');
+    } else {
       console.log('file>>>>>>>', this.props.file);
       
       // redirect to loading page...
       this.context.router.push('/loading');
-      //check for valid jpeg later...
 
       //check for valid jpeg later...
       axios.post('/upload', formData).then(res => {
         console.log('Successfully uploaded photo:', res);
 
         //reset image preview
-        store.dispatch({
+        this.props.dispatch({
           type: 'IMG_THUMB',
           imgThumb: null
         });
@@ -62,7 +65,7 @@ class UploadContainer extends React.Component {
           }
           console.log('stack>>>>', stack);
           //send stack over
-          store.dispatch({
+          this.props.dispatch({
             type: 'IMG_STACK',
             imgStack: stack
           });
@@ -79,8 +82,6 @@ class UploadContainer extends React.Component {
       }).catch(err => {
         console.log('Error uploading photo:', err);
       });
-    } else {
-      alert('Please enter a theme.');
     }
   }
 
@@ -91,11 +92,11 @@ class UploadContainer extends React.Component {
     let file = e.target.files[0];
 
     reader.onloadend = () => {
-      store.dispatch({
+      this.props.dispatch({
         type: 'IMG_FILE',
         file: file
       });
-      store.dispatch({
+      this.props.dispatch({
         type: 'IMG_THUMB',
         imgThumb: reader.result
       });

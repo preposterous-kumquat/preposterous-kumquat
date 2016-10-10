@@ -1,96 +1,112 @@
 import React from 'react';
 import Carousel from 'nuka-carousel';
+import LoadingView from './loading.jsx';
 // import { Link } from 'react-router';
 
 // Using "Stateless Functional Components"
 export default function(props) {
-  console.log('inside carousel view>>>>>', props.stack[0]);
+  let { stack, pairPic1, pairPic2, appendPhoto, removePhoto } = props;
 
+  console.log('inside carousel view>>>>>', stack);
+  console.log('pair PIC 1 >>>', pairPic1);
+  console.log('pair PIC 2 >>>', pairPic2);
+  console.log('appendPhoto>>>', appendPhoto);
+  let defaultLoc = 'center=37.783697,-122.408966&zoom=1';
+  let marker = {
+    c1: '0xFF3C80',
+    c2: '0xFFFB00',
+    m1: pairPic1.lat === undefined ? defaultLoc : Number(pairPic1.lat).toFixed(6) + ',' + Number(pairPic1.long).toFixed(6),
+    m2: pairPic2.lat === undefined ? defaultLoc : Number(pairPic2.lat).toFixed(6) + ',' + Number(pairPic2.long).toFixed(6)
+  };
+  const marker1 = 'markers=color:' + marker.c1 + '%7Clabel:A%7C' + marker.m1;
+  const marker2 = 'markers=color:' + marker.c2 + '%7Clabel:B%7C' + marker.m2;
+  const markerChoice =
+    !(pairPic1.lat || pairPic2.lat) ? defaultLoc :
+    !pairPic1.lat ? marker2 :
+    !pairPic2.lat ? marker1 :
+    marker1 + '&' + marker2;
+  /*if (!(pairPic1.lat || pairPic2.lat)) {
+    markerChoice = defaultLoc;
+  } else if (!pairPic1.lat) {
+    markerChoice = marker2;
+  } else if (!pairPic2.lat) {
+    markerChoice = marker1;
+  } else {
+    markerChoice = marker1 + marker2;
+  }*/
+
+  // IIFE: immediately invoked function expression
+
+
+  let map = {
+    url: 'https://maps.googleapis.com/maps/api/staticmap?',
+    size: 'size=1200x200',
+    scale: 'scale=2',
+    markers: markerChoice,
+    style: 'style=feature:road|color:0xffffff|visibility:simplified',
+    apikey: 'key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI'
+  };
+  // if ()
+  let sampleMap = 'https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&scale=2&size=600x230&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:0xFFFB00%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI';
+  let googleMap = map.url + map.size + '&' + map.scale + '&' + map.markers + '&' + map.style + '&' + map.apikey;
   return (
-    <div id="owl-demo" className="owl-carousel owl-theme">
-      {
-        props.stack.map((pic, i) => 
-          <div className="item" key={i}>
-            <img className='carousel' src={pic.url}/>
-          </div>
-        )
-      }  
+    <div className='allContent'>
+      <div className='filmStrip'>
+        {stack.map((pic, i) => (
+          <span className='picContainerFilm' onClick={(e) => appendPhoto(pic)} key={i} >
+            <img className='filmStripPic' src={pic.url} />
+          </span>
+        ))}
+      </div>
+      <div className='mainContent'>
+        <div className='pairView'>
+          <span className='picBox'>
+            <img id='pairPic1' src={pairPic1.url} onClick={(e) => removePhoto(1)} />
+          </span>
+          <span className='picBox'>
+            <img id='pairPic2' src={pairPic2.url} onClick={(e) => removePhoto(2)} />
+          </span>
+        </div>
+        <div className='mapDiv'>
+          <img src={googleMap} id='googleMap' />
+        </div>
+      </div>
     </div>
-
   );
-
 }
 
-//   // return (
-//   //   <div id="owl-demo" className="owl-carousel owl-theme">
-     
-//   //     <div className="item"><img className='carousel' src='./sampleData/iceCream/iceCream3.png' /></div>
-//   //     <div className="item"><img className='carousel' src='./sampleData/iceCream/iceCream7.png' /></div>
-//   //     <div className="item"><img className='carousel' src='./sampleData/iceCream/iceCream8.png' /></div>
-     
-//   //   </div>
+          // <span id='pic1'><img src={pairPic1}/></span>
+          // <span id='pic2'><img src={pairPic2}/></span>
 
-//   //     // <div className="customNavigation">
-//   //     //   <a className="btn prev">Previous</a>
-//   //     //   <a className="btn next">Next</a>
-//   //     //   <a className="btn play">Autoplay</a>
-//   //     //   <a className="btn stop">Stop</a>
-//   //     // </div>
-//   // );
-// }
-
-// export default props => {
-//   let images = props.stack.map((pic, i) => (
-//       <img key={i} src={pic.url} />
-//   ));
-
-//   return (<Carousel className='ncarousel'>{ images }</Carousel>);
-// };
-
-// export default props => {
-//   let pic = props.stack[0];
-
-//   return <img src={pic.url} />;
-// };
-
-/*
-props.stack.map((pic, i) => (
-          <div className="item" key={i}>
-
-            <img className='carousel' src={pic.url} />
-          </div>
-      ))
-*/
-
-
-
-// OLD SLICK CAROUSEL
+/////////////////MATERIALIZE CAROUSEL//////////////////////////////////
+  // var view = props.stack.length === 0 
+  //   ? <p>loading...</p> 
+  //   : (<div className="carousel">
+  //       {props.stack.map((pic, i) => 
+  //         <a className="carousel-item" href={pic.url} key={i}>
+  //           <img src={pic.url}/>
+  //         </a>
+  //       )}
+  //     </div>);
   // return (
   //   <div>
-  //     <h1>This is the carousel view</h1>
-  //     <div className='center'>
-  //       <div className='slide'>
-  //         <img src={props.sampleData[0]} />
-  //       </div>
-  //       <div className='slide'>
-  //         <img src={props.sampleData[1]} />
-  //       </div>
-  //       <div className='slide'>
-  //         <img src={props.sampleData[2]} />
-  //       </div>
-  //       <div className='slide'>
-  //         <img src={props.sampleData[3]} />
-  //       </div>
-  //       <div className='slide'>
-  //         <img src={props.sampleData[4]} />
-  //       </div>
-  //       <div className='slide'>
-  //         <img src={props.sampleData[5]} />
-  //       </div>
-  //     </div>
-
+  //   {view}
   //   </div>
   // );
+
+////////////OWL CAROUSEL//////////////////////
+    // <div id="owl-demo" className="owl-carousel owl-theme">
+    //   {
+    //     props.stack.map((pic, i) => 
+    //       <div className="item" key={i}>
+    //         <img className='carousel' src={pic.url}/>
+    //       </div>
+    //     )
+    //   }  
+    // </div>
+
+
+
 
 
 

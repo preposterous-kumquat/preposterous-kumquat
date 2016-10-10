@@ -3,7 +3,8 @@ import { Link } from 'react-router';
 
 // Using "Stateless Functional Components"
 export default function(props) {
-  var { sampleData, userName, userEmail, userPhotos } = props;
+  // var { sampleData, userName, userEmail, userPhotos, getStack } = props;
+  var { sampleData, name, email, userPhotos, getStack } = props;
   // var userPhotos = [{url: './sampleData/iceCream/iceCream1.png'}, 
   //                   {url: './sampleData/sunlight-tree.jpg'}, 
   //                   {url: './sampleData/soccer.png'}, 
@@ -16,15 +17,19 @@ export default function(props) {
     // : userPhotos.map(({ file_url }) => (
     //     <span className='picContainer' style={{ backgroundImage: `url('${ file_url }')`}}></span>
     //   ));
-    : userPhotos.map(({file_url}, i) => (
-        <span className='picContainer' style={{ backgroundImage: `url('${ file_url }')`}} key={i}></span>
+    : userPhotos.map(({file_url, id, Theme}, i) => (
+        // <span className='picContainer' style={{ backgroundImage: `url('${ file_url }')`}} key={i}></span>
+        <span className='picContainer' onClick={(e) => {
+          console.log('id:', id, 'theme:', Theme.theme);
+          getStack(id, Theme.theme);
+        }} style={{ backgroundImage: `url('${ file_url }')`}} key={i}></span>
       ));
 
   console.log('userPhotos>>>>', userPhotos);
 
   return (
     <div>
-      <h1>Welcome {userName}</h1>
+      <h1>Welcome {name}</h1>
       <div className='homeContainer'>
         { photoElements }
       </div>
