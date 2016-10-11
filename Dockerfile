@@ -8,6 +8,7 @@ ADD package.json package.json
 RUN npm install 
 RUN npm install nodemon -g 
 RUN npm install webpack -g
+RUN npm install --only=dev
 ADD . .
 RUN chmod +x ./wait-for-it.sh
 RUN webpack

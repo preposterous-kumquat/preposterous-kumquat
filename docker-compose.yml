@@ -1,9 +1,9 @@
 version: '2'
 services:
   main:
-    image: app
+    image: bkilrain/app:latest
     ports:
-      - "3000:3000"
+      - "80:3000"
     links:
       - db
       - photo-processor
@@ -27,11 +27,11 @@ services:
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: app
   photo-processor: 
-    image: photo-processor:0.1
+    image: bkilrain/photo-processor:latest
     expose:
       - "3001"
   curator:
-    image: curator:0.1
+    image: bkilrain/curator:latest
     expose:
       - "3002"
     depends_on:
@@ -44,10 +44,9 @@ services:
   redis:
     image: redis
   simserver:
-    image: simserver:0.1
+    image: bkilrain/simserver:latest
     ports: 
     - "5000:5000"
-
 
 
 
