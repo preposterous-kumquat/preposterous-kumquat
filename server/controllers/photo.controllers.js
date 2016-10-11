@@ -18,7 +18,31 @@ module.exports = {
   stack,
   validPhoto,
   createPair,
-  getPairs
+  getPairs,
+  train
+};
+
+function train (req, res) {
+  let counter = 1;
+  let automate = function() {
+    let config = {
+      method: 'POST',
+      uri: 'http://curator:3002/getTrainingData'
+    }
+    request(config, (err, response, body) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if (counter <= 49) {
+          counter++;
+          automate();
+        } else {
+          res.send();
+        }
+      }
+    })
+  };
+  automate();
 };
 
 function sendToCurator (data) {
