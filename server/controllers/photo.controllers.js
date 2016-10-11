@@ -1,5 +1,4 @@
-// const config = process.env.NODE_ENV === 'PROD' ? require('../config/config.js').PROD : require('../config/config.js').DEV;
-const config = require('../config/config.js').LOCAL
+const config = process.env.NODE_ENV === 'docker' ? require('../config/config.js').DOCKER : require('../config/config.js').LOCAL;
 const models = require('../../db/index');
 const request = require('request');
 const multiparty = require('multiparty');
@@ -91,7 +90,7 @@ function getStack(seed, res) {
     if (err) {
       console.log('error in getting stack', err);
     }
-    console.log('stack received', JSON.parse(body));
+    // console.log('stack received', JSON.parse(body));
     var mapped = {};
     let parsed = JSON.parse(body);
     parsed.forEach( (photo, idx) => {
