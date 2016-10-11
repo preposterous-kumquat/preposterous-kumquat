@@ -13,6 +13,8 @@ import UploadContainer from './components/containers/uploadContainer.jsx';
 import SignupContainer from './components/containers/signupContainer.jsx';
 import SigninContainer from './components/containers/signinContainer.jsx';
 import LoadingView from './components/views/loading.jsx';
+import CreatePairContainer from './components/containers/createpairContainer.jsx';
+import PairViewContainer from './components/containers/pairviewContainer.jsx';
 
 // export default () => (
 //   <Router history={hashHistory}>
@@ -35,6 +37,9 @@ export default (
       <Route path="signin" component={SigninContainer} />
       <Route path="signup" component={SignupContainer} />
       <Route path="loading" component={LoadingView} />
+      <Route path="createpair" component={CreatePairContainer} />
+      <Route path="pairview" component={PairViewContainer} />
+
    </Route>
   </Router>
 );

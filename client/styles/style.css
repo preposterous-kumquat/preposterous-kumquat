@@ -319,6 +319,12 @@ div.homeContainer {
 	justify-content: flex-start;
   margin: 30px 30px 30px 50px;
 	width: 90%;
+	text-align: center;
+}
+
+div.testContainer {
+	display: flex;
+	justify-content: center;
 }
 
 span.picContainer {
@@ -417,7 +423,6 @@ img#googleMap {
 /*img .emptyText {
 	background-color: #CAEBF2;
 }*/
-
 
 
 

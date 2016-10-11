@@ -49,6 +49,7 @@ class SigninContainer extends React.Component {
           });
 
           this.context.router.push('/home');
+          // this.context.router.push('/carousel');
         }).catch(err => {
           console.error('Error getting user details:', err);
         });
