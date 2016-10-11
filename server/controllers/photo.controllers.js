@@ -27,7 +27,7 @@ function train (req, res) {
   let automate = function() {
     let config = {
       method: 'POST',
-      uri: 'http://curator:3002/getTrainingData'
+      uri: `${config.curator}/getTrainingData`
     }
     request(config, (err, response, body) => {
       if (err) {
@@ -127,6 +127,7 @@ function uploadPhoto(req, res) {
       var r = request.post(`${config.photoProcessor}/photoProcessor/upload/${photoId}`, (err, response, body) => {
       // var r = request.post(`photo-processor/photoProcessor/upload/${photoId}`, (err, response, body) => {
         body = JSON.parse(body);
+        console.log(body, "THIS IS THE BODIES")
         if (!body.gps) {
           body.gps = {};
           body.gps.lat = userLat;

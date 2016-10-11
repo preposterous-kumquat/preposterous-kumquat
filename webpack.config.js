@@ -2,8 +2,14 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+  watchOptions: {
+    poll: true
+  },
   entry: './client/app.jsx',
-  output: {path: __dirname + '/client', filename: 'bundle.js'},
+  output: {
+    path: __dirname + '/client', 
+    filename: 'bundle.js'
+  },
   module: {
     loaders: [
       {
@@ -17,3 +23,5 @@ module.exports = {
     ]
   }
 };
+
+
