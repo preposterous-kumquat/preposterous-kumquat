@@ -43,6 +43,8 @@ services:
       - ../curator/config:/usr/src/app/config
   redis:
     image: redis
+    expose:
+      - "6379"
   simserver:
     image: bkilrain/simserver:latest
     ports: 
