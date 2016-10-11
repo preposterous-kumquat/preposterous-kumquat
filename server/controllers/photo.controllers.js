@@ -1,4 +1,4 @@
-const config = process.env.NODE_ENV === 'docker' ? require('../config/config.js').DOCKER : require('../config/config.js').LOCAL;
+const config = process.env.NODE_ENV === 'PROD' ? require('../config/config.js').PROD : require('../config/config.js').DEV;
 const models = require('../../db/index');
 const request = require('request');
 const multiparty = require('multiparty');

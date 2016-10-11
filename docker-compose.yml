@@ -12,7 +12,6 @@ services:
       DATABASE_URL: postgres://docker:docker@db:5432/app
       PHOTO_PROCESSOR: photo-processor:3001
       CURATOR: curator:3002
-      NODE_ENV: docker
     depends_on:
       - "db"
     volumes:

@@ -3,7 +3,7 @@ module.exports = {
     main: 80,
     photoProcesser: 81
   },
-  DOCKER: {
+  DEV: {
     main: 3000,
     photoProcessor: 'http://photo-processor:3001',
     curator: 'http://curator:3002'
