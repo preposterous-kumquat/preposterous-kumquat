@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MainLayout from './layouts/mainlayout.jsx';
 import LandingLayout from './layouts/landinglayout.jsx';
-import store from '../store.jsx';
+// import store from '../store.jsx';
 
 class MainContainer extends React.Component {
   constructor(props) {
@@ -28,8 +28,7 @@ class MainContainer extends React.Component {
   }
   userSignout() {
     this.props.dispatch({
-      type: 'USER_AUTH',
-      hasAuth: false
+      type: 'USER_SIGNOUT'
     });
   }
   // componentDidMount() {
@@ -42,7 +41,7 @@ class MainContainer extends React.Component {
   render() {
     return (
       <div>
-        {this.props.hasAuth ? <MainLayout { ...this.props } userSignout={this.userSignout} /> : <LandingLayout { ...this.props } />}
+        {this.props.auth ? <MainLayout { ...this.props } userSignout={this.userSignout} /> : <LandingLayout { ...this.props } />}
       </div>
     );
   }
@@ -69,7 +68,7 @@ class MainContainer extends React.Component {
 
 const mapStateToProps = function(store) {
   return {
-    hasAuth: store.userState.isLoggedIn
+    auth: store.userState.auth
   };
 };
 

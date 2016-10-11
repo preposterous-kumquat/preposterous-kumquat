@@ -192,6 +192,7 @@ function photos (req, res) {
       UserId: userID
     },
     // limit: 6,
+    include: [models.Themes],
     order: '"createdAt" DESC'
   }).then( (photos) => {
     res.send(photos);

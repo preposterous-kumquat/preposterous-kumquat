@@ -1,6 +1,6 @@
 import React from 'react';
-import Carousel from 'nuka-carousel';
-import LoadingView from './loading.jsx';
+// import Carousel from 'nuka-carousel';
+// import LoadingView from './loading.jsx';
 // import { Link } from 'react-router';
 
 // Using "Stateless Functional Components"
@@ -43,12 +43,12 @@ export default function(props) {
   } else {
     markerChoice = marker1 + marker2;
   }*/
-  // let display = <p>Select two photos to create a pair.</p>;
+  // let displayMap = <p>Select two photos to create a pair.</p>;
   // if (!(pairPic1.lat || pairPic2.lat)) {
-  //   display = <img id='pairPic1' src={pairPic1.url} onClick={(e) => removePhoto(1)} />;
+  //   displayMap = <img id='pairPic1' src={pairPic1.url} onClick={(e) => removePhoto(1)} />;
   // }
 
-  let display = !(pairPic1.lat || pairPic2.lat)
+  let displayMap = !(pairPic1.lat || pairPic2.lat)
     ? <p id='emptyText'>Select two photos to create a pair.</p>
     : <img id='pairPic1' src={pairPic1.url} onClick={(e) => removePhoto(1)} />;
 
@@ -64,7 +64,7 @@ export default function(props) {
     apikey: 'key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI'
   };
 
-  console.log('display', display);
+  console.log('displayMap', displayMap);
   // if ()
   // let sampleMap = 'https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&scale=2&size=600x230&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:0xFFFB00%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI';
   let googleMap = map.url + map.size + '&' + map.scale + '&' + map.markers + '&' + map.style + '&' + map.apikey;
@@ -83,7 +83,7 @@ export default function(props) {
       <div className='mainContent'>
         <div className='pairView'>
           <span className='picBox'>
-            {display}
+            {displayMap}
           </span>
           <span className='picBox'>
             <img id='pairPic2' src={pairPic2.url} onClick={(e) => removePhoto(2)} />

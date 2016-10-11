@@ -14,8 +14,8 @@ services:
       CURATOR: curator:3002
     depends_on:
       - "db"
-    # volumes:
-    #   - .:/usr/src/app
+    volumes:
+      - ./client/bundle.js:/usr/src/app/client/bundle.js
   db:
     image: postgres
     ports:

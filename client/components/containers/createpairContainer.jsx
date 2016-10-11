@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CarouselView from '../views/carousel.jsx';
+import CreatePairView from '../views/createpair.jsx';
 import axios from 'axios';
 
-class CarouselContainer extends React.Component {
+class CreatePairContainer extends React.Component {
   constructor(props) {
     super(props);
     this.appendPhoto = this.appendPhoto.bind(this);
@@ -86,6 +86,10 @@ class CarouselContainer extends React.Component {
   }
 
   createPair(pic1, pic2) {
+    // sample data:
+    pic1 = {};
+    pic2 = {};
+
     if (pic1.url && pic2.url) {
       const config = {
         pair1: pic1.id,
@@ -94,6 +98,7 @@ class CarouselContainer extends React.Component {
       console.log('Pairs>>>>>>>>', config);
       axios.post('/createPair', {params: config}).then(res => {
         console.log('Successfully created pair:', res);
+
         //route to pairview page
       }).catch(err => { 
         console.err('Error creating pair:', err);
@@ -118,7 +123,7 @@ class CarouselContainer extends React.Component {
     // ];
     console.log('array stack>>>>>>>', this.props.imgStack);
     return (
-      <CarouselView {...this.props} stack={this.props.imgStack} appendPhoto={this.appendPhoto} removePhoto={this.removePhoto} createPair={this.createPair} />
+      <CreatePairView {...this.props} stack={this.props.imgStack} appendPhoto={this.appendPhoto} removePhoto={this.removePhoto} createPair={this.createPair} />
     );
   }
 
@@ -132,4 +137,4 @@ const mapStateToProps = function(store) {
   };
 };
 
-export default connect(mapStateToProps)(CarouselContainer);
+export default connect(mapStateToProps)(CreatePairContainer);
