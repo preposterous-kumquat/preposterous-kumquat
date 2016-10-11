@@ -71,7 +71,7 @@ class UploadContainer extends React.Component {
           });
           
           // redirect to carousel page...
-          this.context.router.push('/carousel');
+          this.context.router.push('/createpair');
         }).catch(err => {
           console.log('Error getting stack:', err);
         });

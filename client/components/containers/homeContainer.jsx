@@ -62,7 +62,7 @@ class HomeContainer extends React.Component {
       });
 
       // redirect to carousel page...
-      this.context.router.push('/carousel');
+      this.context.router.push('/createPair');
     }).catch(err => {
       console.error('Error getting stack:', err);
     });
