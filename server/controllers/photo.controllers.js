@@ -19,8 +19,10 @@ module.exports = {
   validPhoto,
   createPair,
   getPairs,
-  train
+  train,
+  getRandStack
 };
+
 
 function train (req, res) {
   let counter = 1;
@@ -78,6 +80,7 @@ function stack(req, res) {
 }
 
 function getStack(seed, res) {
+  console.log('CONFIG', config.curator)
   let options = {
     uri: `${config.curator}/getstack`,
     method: 'GET',
@@ -102,6 +105,20 @@ function getStack(seed, res) {
       };
     });
     res.json(mapped);
+  });
+}
+
+function getRandStack(req, res) {
+  let options = {
+    uri: `${config.curator}/getRandStack`,
+    method: 'GET',
+  };
+  request(options, (err, response, body) => {
+    if (err) {
+      console.log('error in getting stack', err);
+    } else {
+      res.json(JSON.parse(body));
+    }
   });
 }
 
@@ -171,29 +188,6 @@ function savePhoto(body) {
       console.log('Could not find photo, error: ', err);
     });
 }
-
-
-
-
-//   body.clarifaiKeywords.forEach((keyword) => {
-//     models.Keywords.findOrCreate({where: {keyword: keyword}})
-//       .then((keyword) => {
-//         keywordsPK.push(keyword[0].dataValues.id);
-//       })
-//       .then(() => {
-//         console.log(keywordsPK, 'ALL THE KEYWORDS');
-//         return photo.addKeywords(keywordsPK);
-
-//       })
-//       .catch((err) => {
-//         console.log('ERROR: ', err);
-//       });
-//   });
-// }).catch((err) => {
-//   console.error('ERROR: ', err);
-// }); 
-
-
 
 
 function findKeyword(keyword) {

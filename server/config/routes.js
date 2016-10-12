@@ -55,10 +55,10 @@ module.exports = (app, express) => {
   });
 
   // GET A PAIRS
-    app.get('/getPairs', (req, res)=> {
-      console.log('REST', req.query);
-      photos.getPairs(req, res);
-    });
+  app.get('/getPairs', (req, res)=> {
+    console.log('REST', req.query);
+    photos.getPairs(req, res);
+  });
 
 // GET THUMBNAILS
   app.get('/photos', users.requireLogin, (req, res) => {
@@ -68,6 +68,10 @@ module.exports = (app, express) => {
 // GET STACK
   app.get('/stack', users.requireLogin, (req, res) => {
     photos.stack(req, res);
+  });
+
+  app.get('/getRandStack', (req, res) => {
+    photos.getRandStack(req, res);
   });
   
   app.post('/kickoffTraining', (req, res) => {
