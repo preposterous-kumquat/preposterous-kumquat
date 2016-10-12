@@ -19,15 +19,17 @@ module.exports = {
   validPhoto,
   createPair,
   getPairs,
-  train
+  train,
+  getRandStack
 };
+
 
 function train (req, res) {
   let counter = 1;
   let automate = function() {
     let config = {
       method: 'POST',
-      uri: 'http://curator:3002/getTrainingData'
+      uri: `${config.curator}/getTrainingData`
     }
     request(config, (err, response, body) => {
       if (err) {
@@ -78,6 +80,7 @@ function stack(req, res) {
 }
 
 function getStack(seed, res) {
+  console.log('CONFIG', config.curator)
   let options = {
     uri: `${config.curator}/getstack`,
     method: 'GET',
@@ -90,11 +93,10 @@ function getStack(seed, res) {
     if (err) {
       console.log('error in getting stack', err);
     }
-    console.log('stack received', JSON.parse(body));
+    // console.log('stack received', JSON.parse(body));
     var mapped = {};
     let parsed = JSON.parse(body);
     parsed.forEach( (photo, idx) => {
-      console.log(photo, 'this is the current photo');
       mapped[idx] = {
         id: photo.key,
         url: photo.url,
@@ -102,8 +104,21 @@ function getStack(seed, res) {
         long: photo.longitude
       };
     });
-    console.log(mapped, 'MAPPPED OBJECT');
     res.json(mapped);
+  });
+}
+
+function getRandStack(req, res) {
+  let options = {
+    uri: `${config.curator}/getRandStack`,
+    method: 'GET',
+  };
+  request(options, (err, response, body) => {
+    if (err) {
+      console.log('error in getting stack', err);
+    } else {
+      res.json(JSON.parse(body));
+    }
   });
 }
 
@@ -129,6 +144,7 @@ function uploadPhoto(req, res) {
       var r = request.post(`${config.photoProcessor}/photoProcessor/upload/${photoId}`, (err, response, body) => {
       // var r = request.post(`photo-processor/photoProcessor/upload/${photoId}`, (err, response, body) => {
         body = JSON.parse(body);
+        console.log(body, "THIS IS THE BODIES")
         if (!body.gps) {
           body.gps = {};
           body.gps.lat = userLat;
@@ -162,22 +178,29 @@ function savePhoto(body) {
       return photo;
     })
     .then((photo) => {
-      let keywordsPK = [];
-      body.clarifaiKeywords.forEach((keyword) => {
-        models.Keywords.findOrCreate({where: {keyword: keyword}})
-          .then((keyword) => {
-            keywordsPK.push(keyword[0].dataValues.id);
-          })
-          .then(() => {
-            return photo.addKeywords(keywordsPK);
-          })
-          .catch((err) => {
-            console.log('ERROR: ', err);
-          });
+      let actions = body.clarifaiKeywords.map(findKeyword);
+      let results = Promise.all(actions);
+      results.then((allKeywords) => {
+        photo.addKeywords(allKeywords);
       });
-    }).catch((err) => {
-      console.error('ERROR: ', err);
-    }); 
+    })
+    .catch((err) => {
+      console.log('Could not find photo, error: ', err);
+    });
+}
+
+
+function findKeyword(keyword) {
+  return new Promise((resolve, reject) => {
+    models.Keywords.findOrCreate({where: {keyword: keyword}})
+      .then((keyword) => {
+        // console.log(keyword, 'MY KEYWORD FOUND', keyword[0].dataValues.id, 'KEYWORD ID =========================');
+        resolve(keyword[0].dataValues.id);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 function validPhoto(req, res) {

@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const ports = require('./config/config.js');
-const port = process.env.NODE_ENV === 'PROD' ? ports.PROD : ports.DEV;
+const port = process.env.NODE_ENV === 'docker' ? ports.DOCKER : ports.LOCAL;
 
 const db = require('../db/index.js').sequelize;
 

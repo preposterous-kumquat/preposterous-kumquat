@@ -17,7 +17,7 @@ module.exports = {
 
 function requireLogin(req, res, next) {
   if (!isLoggedIn(req)) {
-    res.send(401);
+    res.sendStatus(401);
   } else {
     next();
   }
@@ -67,20 +67,20 @@ function login(req, res) {
     .then( (user) => {
       if (!user) {
         console.log('invalid username');
-        res.send(400, {error: 'User Account does not exist'});
+        res.status(400).send({error: 'User Account does not exist'});
       } else {
         if (bcrypt.compareSync(data.pw, user.dataValues.password)) {
           console.log('user login successful');
           module.exports.createSession(req, res, user);
         } else {
           console.log('invalid password');
-          res.send(401);
+          res.sendStatus(401);
         }
       }
     })
     .catch( (err) => {
       console.log('error on login', err);
-      res.send(500);
+      res.sendStatus(500);
     });
 }
 
