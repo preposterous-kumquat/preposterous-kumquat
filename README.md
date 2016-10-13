@@ -2,6 +2,15 @@
 
 > Finding connection with a human lens
 
+## Micro-Services
+  - 
+[Photo-Processor](https://github.com/preposterous-kumquat/photoProcessing)
+  - 
+[Curator](https://github.com/preposterous-kumquat/curator)
+  - 
+[Similarity Server](https://github.com/preposterous-kumquat/similarityServer)
+
+
 ## Team
 
   - __Product Owner__: [Josphine Eng](https://github.com/ChirpingMermaid)
@@ -9,8 +18,8 @@
   - __Development Team Members__: [Brian Kilrain](https://github.com/bkilrain)
 
 ## Table of Contents
-
-1. [Usage](#Usage)
+1. [Micro-Services](#micro-services)
+1. [Usage](#usage)
 1. [Requirements](#requirements)
 1. [Docker Development](#docker-development)
     1. [Build Image](#build-image)
@@ -22,6 +31,7 @@
     1. [Seed Database Data](#seed-database-data)
 1. [Team](#team)
 1. [Contributing](#contributing)
+
 
 ## Usage
 
