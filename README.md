@@ -1,6 +1,6 @@
 # Lensity
 
-> Finding connection with a human lens
+Finding connection with a human lens
 
 ## Team
 
