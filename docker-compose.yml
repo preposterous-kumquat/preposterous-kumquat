@@ -14,10 +14,11 @@ services:
       CURATOR: curator:3002
     depends_on:
       - "db"
-    volumes:
-      - ./client/bundle.js:/usr/src/app/client/bundle.js
-      - ./client:/usr/src/app/client
-      - ./server:/usr/src/app/server
+    # uncomment for easy development
+    # volumes:
+    #   - ./client/bundle.js:/usr/src/app/client/bundle.js
+    #   - ./client:/usr/src/app/client
+    #   - ./server:/usr/src/app/server
   db:
     image: postgres
     ports:
@@ -43,8 +44,8 @@ services:
       - ../curator/config:/usr/src/app/config
   redis:
     image: redis
-    expose:
-      - "6379"
+    ports:
+      - "6379:6379"
   simserver:
     image: bkilrain/simserver:latest
     ports: 
