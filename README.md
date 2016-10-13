@@ -4,7 +4,7 @@
 
 ## Team
 
-  - __Product Owner__: Josphine Eng
+  - __Product Owner__: [Josphine Eng](https://github.com/ChirpingMermaid)
   - __Scrum Master__: Julie Truong
   - __Development Team Members__: Brian Kilrain
 
