@@ -17,6 +17,10 @@ class UploadContainer extends React.Component {
     };
   }
 
+  componentWillMount() {
+    // clearInterval(this.props.imgSlideshow);
+  }
+
   componentDidMount() {
     $('.theme').on('click', function() {
       $(this).addClass('selected');
@@ -71,7 +75,7 @@ class UploadContainer extends React.Component {
           });
           
           // redirect to carousel page...
-          this.context.router.push('/createpair');
+          this.context.router.push('/carousel');
         }).catch(err => {
           console.log('Error getting stack:', err);
         });
@@ -170,7 +174,8 @@ const mapStateToProps = function(store) {
   return {
     hasAuth: store.userState.isLoggedIn,
     imgThumb: store.imgState.imgThumb,
-    file: store.imgState.file
+    file: store.imgState.file,
+    // imgSlideshow: store.imgState.imgSlideshow
   };
 };
   

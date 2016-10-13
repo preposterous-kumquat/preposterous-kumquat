@@ -9,6 +9,7 @@ class CreatePairContainer extends React.Component {
     this.appendPhoto = this.appendPhoto.bind(this);
     this.removePhoto = this.removePhoto.bind(this);
     this.createPair = this.createPair.bind(this);
+    this.makeMapURL = this.makeMapURL.bind(this);
   }
 
   //for context router to work
@@ -19,38 +20,15 @@ class CreatePairContainer extends React.Component {
   }
 
   componentDidMount() {
-    // $('.carousel').carousel();
   }
 
   componentWillMount() {
-    // $('body').addClass('loaded');
     this.props.dispatch({ type: 'RESET_PIC_PAIR' });
   }
 
   componentDidUpdate() {
     console.log('inside component did update');
-    console.log(this.props.pairPic1);
-    //materialize carousel
-    // $('.carousel').carousel();
-
-    //owl carousel
-    // $('#owl-demo').owlCarousel({
-   
-    //   navigation: true, // Show next and prev buttons
-    //   slideSpeed: 300,
-    //   paginationSpeed: 400,
-    //   singleItem: true,
-    //   autoPlay: 2000,
-    //   stopOnHover: true
- 
-    //   // "singleItem:true" is a shortcut for:
-    //   // items : 1, 
-    //   // itemsDesktop : false,
-    //   // itemsDesktopSmall : false,
-    //   // itemsTablet: false,
-    //   // itemsMobile : false
-    // });
-
+    // console.log(this.props.pairPic1);
   }
 
   appendPhoto(pic) {
@@ -59,7 +37,6 @@ class CreatePairContainer extends React.Component {
       this.props.dispatch({
         type: 'PAIR_PIC1',
         pic
-        // pic: pic
       });    
     } else {
       this.props.dispatch({
@@ -70,70 +47,99 @@ class CreatePairContainer extends React.Component {
   }
 
   removePhoto(picNum) {
-    // if (picNum === 1) {
-    //   store.dispatch({
-    //     type: 'PAIR_PIC1',
-    //     pairPic1: {}
-    //   });
-    // }
-    // if (picNum === 2) {
-    //   store.dispatch({
-    //     type: 'PAIR_PIC2',
-    //     pairPic2: {}
-    //   });
-    // }
     this.props.dispatch({ type: 'REMOVE_PAIR_PIC' + picNum });
   }
 
-  createPair(pic1, pic2) {
-    // sample data:
-    pic1 = {};
-    pic2 = {};
+  makeMapURL(pic1, pic2) {
+    //let { pairPic1, pairPic2 } = this.props;
+    let defaultLoc = 'center=12.2,8.6&zoom=1';
+    console.log('inside makeMapURL');
+    console.log('pair PIC 1 >>>', pic1);
+    console.log('pair PIC 2 >>>', pic2);
+    let marker = {
+      c1: '0xFF3C80',
+      c2: '0xFFFB00',
+      m1: pic1.lat === undefined ? defaultLoc : Number(pic1.lat).toFixed(6) + ',' + Number(pic1.long).toFixed(6),
+      m2: pic2.lat === undefined ? defaultLoc : Number(pic2.lat).toFixed(6) + ',' + Number(pic2.long).toFixed(6)
+    };
+    const marker1 = 'markers=color:' + marker.c1 + '%7Clabel:A%7C' + marker.m1;
+    const marker2 = 'markers=color:' + marker.c2 + '%7Clabel:B%7C' + marker.m2;
+    let markerChoice =
+      !(pic1.lat || pic2.lat) ? defaultLoc :
+      !pic1.lat ? marker2 :
+      !pic2.lat ? marker1 :
+      marker1 + '&' + marker2;
 
+    if (pic1.lat !== undefined && pic2.lat !== undefined && 
+        pic1.lat === pic2.lat && pic1.long === pic2.long) {
+      markerChoice += '&zoom=4';
+    }
+    if ((pic1.lat === undefined && pic2.lat !== undefined) || (pic2.lat === undefined && pic1.lat !== undefined)) {
+      markerChoice += '&zoom=4';
+    }
+
+    let map = {
+      url: 'https://maps.googleapis.com/maps/api/staticmap?',
+      size: 'size=1200x200',
+      scale: 'scale=2',
+      markers: markerChoice,
+      style: 'style=feature:road|color:0xffffff|visibility:simplified',
+      apikey: 'key=AIzaSyDlVAAYhI3d2knKhHRedZBEntyII_PtgDI'
+    };
+
+    let googleMap = map.url + map.size + '&' + map.scale + '&' + map.markers + '&' + map.style + '&' + map.apikey;
+    console.log('google map url:', googleMap);
+    return googleMap;
+  }
+
+  createPair(pic1, pic2) {
+    let mapURL = this.makeMapURL(pic1, pic2);
     if (pic1.url && pic2.url) {
+      this.context.router.push('/loading');
       const config = {
         pair1: pic1.id,
         pair2: pic2.id
       };
-      console.log('Pairs>>>>>>>>', config);
-      axios.post('/createPair', {params: config}).then(res => {
+      axios.post('/createPair', config).then(res => {
         console.log('Successfully created pair:', res);
-
+        this.props.dispatch({
+          type: 'GET_PAIR',
+          pic1: res.data.pair1,
+          pic2: res.data.pair2,
+          mapURL: mapURL,
+          theme: res.data.theme
+        });
+        let data = {
+          pic1: res.data.pair1.id,
+          pic2: res.data.pair2.id,
+          theme: res.data.theme
+        };
+        console.log('Pairs | createpair>>>>>>>>', data);
         //route to pairview page
+        this.context.router.push('/pairview');
       }).catch(err => { 
         console.err('Error creating pair:', err);
       });
     } else {
       alert('Please select 2 photos to create a pair.');
     }
-
   }
 
   render() {
-    //sample ice cream data
-    // let sampleData = [
-    //   './sampleData/iceCream/iceCream2.png',
-    //   './sampleData/iceCream/iceCream3.png',
-    //   './sampleData/iceCream/iceCream4.png',
-    //   './sampleData/iceCream/iceCream7.png',
-    //   './sampleData/iceCream/iceCream8.png',
-    //   './sampleData/iceCream/iceCream10.png',
-    //   'http://i.telegraph.co.uk/multimedia/archive/02622/icecream_2622398b.jpg',
-    //   'http://footage.framepool.com/shotimg/qf/934595705-eis-speiseeis-grimasse-naschen-suess-geschmack.jpg'
-    // ];
     console.log('array stack>>>>>>>', this.props.imgStack);
     return (
-      <CreatePairView {...this.props} stack={this.props.imgStack} appendPhoto={this.appendPhoto} removePhoto={this.removePhoto} createPair={this.createPair} />
+      <CreatePairView {...this.props} stack={this.props.imgStack} appendPhoto={this.appendPhoto} removePhoto={this.removePhoto} createPair={this.createPair} makeMapURL={this.makeMapURL} />
     );
   }
-
 }
 
 const mapStateToProps = function(store) {
   return {
     imgStack: store.imgState.imgStack,
     pairPic1: store.imgState.pairPic1,
-    pairPic2: store.imgState.pairPic2
+    pairPic2: store.imgState.pairPic2,
+    imgTheme: store.imgState.pairTheme
+    // imgTheme: store.imgState.imgTheme
   };
 };
 

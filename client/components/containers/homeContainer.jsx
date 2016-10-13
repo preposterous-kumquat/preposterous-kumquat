@@ -22,15 +22,10 @@ class HomeContainer extends React.Component {
 
   // componentDidUpdate() {
   componentWillMount() {
+    // clearInterval(this.props.imgSlideshow);
     axios.get('/photos').then(res => {
       console.log('Successfully retrieved photos:', res);
       // dispatch to update user photos
-      // let userPhotos = [{url: './sampleData/iceCream/iceCream1.png'}, 
-      //               {url: './sampleData/sunlight-tree.jpg'}, 
-      //               {url: './sampleData/soccer.png'}, 
-      //               {url: './sampleData/christmasLucy.jpg'}, 
-      //               {url: './sampleData/motherChild.png'}, 
-      //               {url: './sampleData/camping.png'}];
       this.props.dispatch({
         type: 'USER_PHOTOS',
         userPhotos: res.data
@@ -45,7 +40,7 @@ class HomeContainer extends React.Component {
       id: id,
       theme: theme
     };
-    console.log('inside getStack, config>>>>', config);
+    console.log('inside getStack | config>>>>', config);
     // redirect to loading page...
     this.context.router.push('/loading');
     axios.get('/stack', {params: config}).then(res => {
@@ -55,37 +50,27 @@ class HomeContainer extends React.Component {
         stack.push(res.data[key]);
       }
       console.log('(homeContainer)stack>>>>', stack);
-      //send stack over
+      //send stack and theme over
       this.props.dispatch({
         type: 'IMG_STACK',
         imgStack: stack
       });
+      this.props.dispatch({
+        type: 'IMG_THEME',
+        theme: theme
+      });
 
       // redirect to carousel page...
-      this.context.router.push('/createPair');
+      // this.context.router.push('/createPair');
+      this.context.router.push('/carousel');
     }).catch(err => {
       console.error('Error getting stack:', err);
     });
   }
   render() {
-    // let userPhotos = [{url: './sampleData/iceCream/iceCream1.png'}, 
-    //                 {url: './sampleData/sunlight-tree.jpg'}, 
-    //                 {url: './sampleData/soccer.png'}, 
-    //                 {url: './sampleData/christmasLucy.jpg'}, 
-    //                 {url: './sampleData/motherChild.png'}, 
-    //                 {url: './sampleData/camping.png'}];
     let firstName = this.props.name.split(' ')[0];
-    let sampleData = [
-      'http://www.wallpapereast.com/static/images/nature-view-for-you-wide-wallpaper-339094.jpg',
-      'http://www.wallpapereast.com/static/images/nature_wallpaper_hd33.jpg',
-      'http://www.wallpapereast.com/static/images/nature-wallpaper-1440x900-004.jpg',
-      'http://www.wallpapereast.com/static/images/6973269-nature-wallpapers-widescreen.jpg',
-      'http://www.wallpapereast.com/static/images/nature-wallpapers-hd_VBh2qs3.jpg',
-    ];
     return (
-      // <HomeView { ...this.props } userName={firstName} />
       <HomeView { ...this.props } name={firstName} getStack={this.getStack}/>
-      // <HomeView userPhotos={userPhotos} userName={firstName} sampleData={sampleData} />
     );
   }
 
@@ -97,7 +82,8 @@ const mapStateToProps = function(store) {
     name: store.userState.name,
     email: store.userState.email,
     userPhotos: store.userState.userPhotos,
-    imgStack: store.imgState.imgStack
+    imgStack: store.imgState.imgStack,
+    // imgSlideshow: store.imgState.imgSlideshow
   };
 };
 

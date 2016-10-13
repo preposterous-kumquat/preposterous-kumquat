@@ -1,10 +1,7 @@
 import { combineReducers } from 'redux';
 
 // Reducers
-import testReducer from './testReducer.jsx';
-// import userReducer from './user-reducer';
-// import widgetReducer from './widget-reducer';
-// import searchLayoutReducer from './search-layout-reducer';
+// import testReducer from './testReducer.jsx';
 
 let persist = (key, value) => localStorage.setItem(key, value);
 
@@ -29,7 +26,15 @@ const imgInitState = restoreDefault('img', {
   imgThumb: '',
   imgStack: [],
   pairPic1: {},
-  pairPic2: {}
+  pairPic2: {},
+  pairViewPic1: {},
+  pairViewPic2: {},
+  mapURL: '',
+  pairTheme: '',
+  allPairs: [],
+  imgFeature: '',
+  imgSlideshow: '',
+  imgTheme: ''
 });
 
 // The User Reducer
@@ -41,8 +46,8 @@ const userReducer = function(state = userInitState, action) {
       state = { ...state, auth: true, name: action.name, email: action.email };
       break;
     case 'USER_SIGNOUT':
-      // state = { ...state, auth: false, name: '', email: '', userPhotos: [] };
-      state = userInitState;
+      state = { ...state, auth: false, name: '', email: '', userPhotos: [] };
+      // state = userInitState;
       break;
     case 'USER_PHOTOS':
       state = { ...state, userPhotos: action.userPhotos };
@@ -82,6 +87,21 @@ const imgReducer = function(state = imgInitState, action) {
     case 'RESET_PIC_PAIR':
       state = { ...state, pairPic1: {}, pairPic2: {} };
       break;
+    case 'GET_PAIR':
+      state = { ...state, pairViewPic1: action.pic1, pairViewPic2: action.pic2, mapURL: action.mapURL, pairTheme: action.theme };
+      break;
+    case 'GET_ALL_PAIRS':
+      state = { ...state, allPairs: action.pairs };
+      break;
+    case 'FEATURE_PHOTO':
+      state = { ...state, imgFeature: action.feature };
+      break;
+    case 'IMG_SLIDESHOW':
+      state = { ...state, imgSlideshow: action.slideshow };
+      break;
+    case 'IMG_THEME':
+      state = { ...state, imgTheme: action.theme };
+      break;
   }
   persist('img', JSON.stringify(state));
   return state;
@@ -94,19 +114,11 @@ const imgReducer = function(state = imgInitState, action) {
 //     break;
 //   }
 // };
-// The Widget Reducer
-// const widgetReducer = function(state = {}, action) {
-//   return state;
-// };
-
 
 // Combine Reducers
 var reducers = combineReducers({
-  testState: testReducer,
   userState: userReducer,
   imgState: imgReducer
-  // widgetState: widgetReducer,
-  // searchLayoutState: searchLayoutReducer
 });
 
 export default reducers;

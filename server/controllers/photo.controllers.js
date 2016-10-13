@@ -133,7 +133,7 @@ function uploadPhoto(req, res) {
       UserId: userID
     }).then( (photo) => {
       let photoId = photo.dataValues.id;
-
+      console.log(photoId, 'NEW PHOTO ID *************************')
       var form = new FormData();
       form.append('theme', req.body.theme);
       form.append('name', req.file.originalname);
@@ -150,6 +150,7 @@ function uploadPhoto(req, res) {
           body.gps.lat = userLat;
           body.gps.long = userLong;
         }
+        console.log('THIS IS THE BODY THAT"S BACK ^^^^^^^^^^^^^^^^^^^^^^^', body);
         sendToCuratorAsync(body)
           .then((stack)=> {
             fs.unlink(`${__dirname}/../../${file.path}`);
@@ -228,7 +229,8 @@ function photos (req, res) {
 // DOES NOT CHECK FOR IF PHOTOS ARE IN THE SYSTEM
 function createPair(req, res) {
   // SORT THE ORDER OF PHOTO ID, SO FIRST PHOTO HAS THE LOWER INDEX
-  let pair = [req.query.pair1, req.query.pair2]
+  console.log('req body in create pair func', req.body);
+  let pair = [req.body.pair1, req.body.pair2]
                 .sort((a, b) => {
                   return a - b;
                 });
@@ -241,7 +243,6 @@ function createPair(req, res) {
       {model: models.Themes}
     ]
   }).then((firstPhoto) => {
-
     // FIND ALL PAIRS FOR FIRST PHOTO
     let allMatches = [];
 
@@ -259,6 +260,11 @@ function createPair(req, res) {
               firstPhoto.addPair(secondPhoto);
             } 
 
+            // console.log('response from create pair', {
+            //   theme: firstPhoto.Theme.dataValues.theme,
+            //   pair1: formatPhotoModel(firstPhoto),
+            //   pair2: formatPhotoModel(secondPhoto)
+            // });
             // SENDING BACK PAIR
             res.json({
               theme: firstPhoto.Theme.dataValues.theme,

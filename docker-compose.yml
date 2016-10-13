@@ -16,6 +16,8 @@ services:
       - "db"
     volumes:
       - ./client/bundle.js:/usr/src/app/client/bundle.js
+      - ./client:/usr/src/app/client
+      - ./server:/usr/src/app/server
   db:
     image: postgres
     ports:
@@ -37,6 +39,8 @@ services:
       - "simserver"
     # environment:
     #   NODE_ENV: PROD
+    volumes:
+      - ../curator/config:/usr/src/app/config
   redis:
     image: redis
   simserver:

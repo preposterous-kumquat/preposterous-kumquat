@@ -10,6 +10,7 @@ RUN npm install nodemon -g
 RUN npm install webpack -g
 ADD . .
 RUN chmod +x ./wait-for-it.sh
+RUN webpack
 
 CMD ["npm", "start"]
 
