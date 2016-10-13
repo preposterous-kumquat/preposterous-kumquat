@@ -15,7 +15,9 @@ services:
     depends_on:
       - "db"
     volumes:
-      - ./client/bundle.js:/usr/src/app/client/bundle.js
+      # - ./client/bundle.js:/usr/src/app/client/bundle.js
+      - ./client:/usr/src/app/client
+      - ./server:/usr/src/app/server
   db:
     image: postgres
     ports:

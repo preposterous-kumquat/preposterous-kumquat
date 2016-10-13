@@ -15,7 +15,9 @@ export default props => {
   return (
     <div className='contentBox'>
       <nav className='navBar'>
-
+        <Link to='/community' activeClassName="active">
+          <button id='signinNav' className='btn nav text'>Explore</button>
+        </Link>
         <Link to='/signin' activeClassName="active">
           <button id='signinNav' className='btn nav text'>Log In</button>
         </Link>

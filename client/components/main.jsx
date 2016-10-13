@@ -12,63 +12,37 @@ class MainContainer extends React.Component {
     // console.log(hasAuth);
     //console.log("store.userState.isLoggedIn", store.userState.isLoggedIn);
     this.userSignout = this.userSignout.bind(this);
+    this.stopSlideshow = this.stopSlideshow.bind(this);
   }
   componentDidMount() {
-    // $('#signupNav').on('mouseenter mouseleave', function() {
-    //   $(this).toggleClass('changeButtonColor');
-    // });
-    // $('button.btn.nav.text').on('mouseenter mouseleave', function() {
-    //   $(this).toggleClass('changeFontColor');
-    // });
-    
-    // $('#signinNav').on('mouseenter mouseleave', function() {
-    //   $(this).toggleClass('changeFontColor');
-    // });
-    //not sure if the bottom part matters
   }
+
   userSignout() {
+    clearInterval(this.props.imgSlideshow);
     this.props.dispatch({
       type: 'USER_SIGNOUT'
     });
   }
-  // componentDidMount() {
-  //   console.log(this.props.hasAuth);
-  // }
-  // componentDidMount() {
-  //   userApi.getUsers();
-  //   store.dispatch(loadSearchLayout('users', 'User Results'));
-  // }
+
+  stopSlideshow() {
+    clearInterval(this.props.imgSlideshow);
+  }
+
   render() {
     return (
       <div>
-        {this.props.auth ? <MainLayout { ...this.props } userSignout={this.userSignout} /> : <LandingLayout { ...this.props } />}
+        {this.props.auth 
+          ? <MainLayout { ...this.props } userSignout={this.userSignout} stopSlideshow={this.stopSlideshow}/> 
+          : <LandingLayout { ...this.props } />}
       </div>
     );
   }
-  //console.log(this.props.hasAuth);
-
-  // render() {
-  //   return (
-  //     <div>
-  //       <LandingLayout { ...this.props } />
-  //     </div>
-  //   );
-  // }
-
-  // // }
-  // render() {
-  //   return (
-  //     <div>
-  //       <MainLayout { ...this.props } />
-  //     </div>
-  //   );
-  // }
-
 }
 
 const mapStateToProps = function(store) {
   return {
-    auth: store.userState.auth
+    auth: store.userState.auth,
+    imgSlideshow: store.imgState.imgSlideshow
   };
 };
 

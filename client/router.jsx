@@ -15,18 +15,7 @@ import SigninContainer from './components/containers/signinContainer.jsx';
 import LoadingView from './components/views/loading.jsx';
 import CreatePairContainer from './components/containers/createpairContainer.jsx';
 import PairViewContainer from './components/containers/pairviewContainer.jsx';
-
-// export default () => (
-//   <Router history={hashHistory}>
-//     <Route path="/" component={MainContainer}>
-//       <Route path="home" component={HomeContainer} />
-//       <Route path="upload" component={UploadContainer} />
-//       <Route path="carousel" component={CarouselContainer} />
-//       <Route path="signin" component={SigninContainer} />
-//       <Route path="signup" component={SignupContainer} />
-//    </Route>
-//   </Router>
-// );
+import CommunityContainer from './components/containers/communityContainer.jsx';
 
 export default (
   <Router history={hashHistory}>
@@ -39,24 +28,8 @@ export default (
       <Route path="loading" component={LoadingView} />
       <Route path="createpair" component={CreatePairContainer} />
       <Route path="pairview" component={PairViewContainer} />
-
+      <Route path="community" component={CommunityContainer} />
    </Route>
   </Router>
 );
 
-// export default (
-//   <Router history={browserHistory}>
-//     <Route path="/" component={MainContainer}>
-//       <IndexRoute component={MainLayout}>
-//           <Route path="home" component={Home} />
-//           <Route path="upload" component={Upload} />
-//           <Route path="carousel" component={Carousel} />
-//           <Route path="signin" component={SignIn} />
-//       </IndexRoute>
-//       <IndexRoute component={LandingLayout}>
-//           <Route path="signup" component={SignUp} />
-//           <Route path="signin" component={SignIn} />
-//       </IndexRoute>
-//    </Route>
-//   </Router>
-// );

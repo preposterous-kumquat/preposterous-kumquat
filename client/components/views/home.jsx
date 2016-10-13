@@ -20,11 +20,12 @@ export default function(props) {
     : <div className='homeContainer'>
       {userPhotos.map(({file_url, id, Theme}, i) => (
         // <span className='picContainer' style={{ backgroundImage: `url('${ file_url }')`}} key={i}></span>
-        <span className='picContainer' onClick={(e) => {
-          console.log('id:', id, 'theme:', Theme.theme);
-          getStack(id, Theme.theme);
-        }} style={{ backgroundImage: `url('${ file_url }')`}} key={i}></span>
-      ))}
+        <span className='pcContainer' key={i}>
+          <span className='picContainer' onClick={(e) => { getStack(id, Theme.theme); }}
+            style={{ backgroundImage: `url('${ file_url }')`}} >
+          </span>
+        </span>
+        ))}
       </div>;
 
   console.log('userPhotos>>>>', userPhotos);
@@ -32,38 +33,7 @@ export default function(props) {
   return (
       <div>
         <h1>Welcome {name}</h1>
-        <div className='testContainer'>
           { photoElements }
-        </div>
       </div>
   );
 }
-        // <div className='homeContainer'>
-        //   <span className='picContainer'><img className='homePic' src='./sampleData/iceCream/iceCream1.png'/></span>
-        //   <span className='picContainer'><img className='homePic' src='./sampleData/sunlight-tree.jpg' /></span>
-        //   <span className='picContainer'><img className='homePic' src='./sampleData/soccer.png' /></span>
-        //   <span className='picContainer'><img className='homePic' src='./sampleData/christmasLucy.jpg' /></span>
-        //   <span className='picContainer'><img className='homePic' src='./sampleData/motherChild.png' /></span>
-        //   <span className='picContainer'><img className='homePic' src='./sampleData/camping.png' /></span>
-        // </div>
-
-      // {userPhotos.length === 0 ? <p>You have not uploaded any photos yet.</p> : 
-      //   userPhotos.map((pic, i) => {
-      //     <span className='homeCell' key={i}><img className='homePic' src={pic.url} /></span>;
-      //   })
-      // }
-
-        // <table>
-        //   <tbody>
-        //     <tr>
-        //       <td><Link to='/carousel' activeClassName="active"><img className='homePic' src='./sampleData/iceCream/iceCream1.png' /></Link></td>
-        //       <td><Link to='/carousel' activeClassName="active"><img className='homePic' src='./sampleData/sunlight-tree.jpg' /></Link></td> 
-        //       <td><Link to='/carousel' activeClassName="active"><img className='homePic' src='./sampleData/soccer.png' /></Link></td>
-        //     </tr>
-        //     <tr>
-        //       <td><Link to='/carousel' activeClassName="active"><img className='homePic' src='./sampleData/christmasLucy.jpg' /></Link></td>
-        //       <td><Link to='/carousel' activeClassName="active"><img className='homePic' src='./sampleData/motherChild.png' /></Link></td> 
-        //       <td><Link to='/carousel' activeClassName="active"><img className='homePic' src='./sampleData/camping.png' /></Link></td>
-        //     </tr>
-        //   </tbody>
-        // </table>  

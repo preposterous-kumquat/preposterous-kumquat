@@ -17,6 +17,10 @@ class UploadContainer extends React.Component {
     };
   }
 
+  componentWillMount() {
+    // clearInterval(this.props.imgSlideshow);
+  }
+
   componentDidMount() {
     $('.theme').on('click', function() {
       $(this).addClass('selected');
@@ -170,7 +174,8 @@ const mapStateToProps = function(store) {
   return {
     hasAuth: store.userState.isLoggedIn,
     imgThumb: store.imgState.imgThumb,
-    file: store.imgState.file
+    file: store.imgState.file,
+    // imgSlideshow: store.imgState.imgSlideshow
   };
 };
   
