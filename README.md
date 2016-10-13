@@ -1,12 +1,12 @@
-# Project Name
+# Lensity
 
-> Pithy project description
+> Finding connection with a human lens
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Josphine Eng
+  - __Scrum Master__: Julie Truong
+  - __Development Team Members__: Brian Kilrain
 
 ## Table of Contents
 
@@ -14,7 +14,8 @@
 1. [Requirements](#requirements)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
+    1. [Compile React](#compile-react)
+    1. [Seed Database Data](#seed-database-data)
 1. [Team](#team)
 1. [Contributing](#contributing)
 
@@ -25,10 +26,7 @@
 ## Requirements
 
 - Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Postgresql 6.1.x
 
 ## Development
 
@@ -37,9 +35,14 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 npm install
-bower install
+```
+### Compile React
+
+From within the root directory run webpack:
+
+```sh
+webpack -watch
 ```
 
 ### Seed Database Data
