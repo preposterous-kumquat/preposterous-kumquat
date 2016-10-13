@@ -14,6 +14,8 @@
 1. [Requirements](#requirements)
 1. [Docker Development](#docker-development)
     1. [Build Image](#build-image)
+    1. [Launch Docker Container](#launch-docker-container)
+    1. [Train Corpus](#train-corpus)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
     1. [Compile React](#compile-react)
@@ -39,6 +41,14 @@ In root folder run:
 ```sh
 docker build -t app .
 ```
+### Launch Docker Container
+```sh
+docker-compose up
+```
+### Train Corpus 
+- Use Postman to send POST request to
+``` http://0.0.0.0:5000/train ```
+
 
 ## Development
 
