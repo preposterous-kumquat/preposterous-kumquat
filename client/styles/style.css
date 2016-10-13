@@ -39,12 +39,20 @@ button.pairButton {
 /*	background-color: none;*/
 }
 
-button.pairButton {
-	margin-bottom: 6px;
+button.pairButtonCP {
+	border: 0;
+	border-radius: 5px;
+	padding: 8px;
+	background-color: transparent;
+	font-family: Raleway, "Helvetica Neue", HelveticaNeue, Helvetica, TeXGyreHeros, FreeSans, "Nimbus Sans L", "Liberation Sans", Arial, sans-serif;
+	font-size: 14px;
+	color: #CAEBF2;
+	margin: 10px 8px 15px 8px;
 }
 
 button.btn.nav.pop,
-button.pairButton {
+button.pairButton,
+button.pairButtonCP {
 	/*border: 1px solid #A9A9A9;*/
 	background-color: #CAEBF2;
 	color: #444444;
@@ -62,7 +70,8 @@ button.btn.nav.text:hover {
 	color: #FF3C80;
 }
 button.btn.nav.pop:hover,
-button.pairButton:hover {
+button.pairButton:hover,
+button.pairButtonCP:hover {
 	background-color: #FF3C80;
 }
 
@@ -334,7 +343,16 @@ img#googleMap {
 	width: 100%;
 }
 
+/*span#pairSpan {
+	padding: 50px 0 50px 0;
+	border: 1px solid blue;
+}*/
+
 /*//////////////////// PAIR VIEW /////////////////*/
+div.allContentPairView {
+  display: flex;
+  flex-direction: column;
+}
 div.pairPicsBox {
 	display: flex;
   justify-content: center;
@@ -347,19 +365,47 @@ img.pairPic, img.pairPicMap {
 img#pvPic1 {
 	border-top: 3px solid rgba(255, 60, 128, .8);
 	padding-top: 3px;
+/*  max-height: 400px;
+  width: auto;*/
 }
 
 img#pvPic2 {
 	border-top: 3px solid rgba(255, 251, 0, 1);
 	padding-top: 3px;
+/*	max-height: 400px;
+  width: auto;*/
+}
+
+div.pairPicsBox {
+	display: flex;
+	justify-content: center;
 }
 
 span.pairPicBox {
-	padding: 5px;
+/*	padding: 5px;
+	max-height: 410px;*/
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	height: 400px;
 }
 
+#pvPic1, #pvPic2 {
+	max-height: 400px;
+  max-width: 95%;
+  border: 1px solid white;
+}
+
+.pairPic {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	height: 400px;
+}
 div.mapBox, div.pairPicsBox {
-	width: 80%;
+	width: 90%;
 }
 
 div.mapBox {
@@ -370,6 +416,7 @@ img#pvTheme {
 	width: 45px;
 	opacity: .8;
 }
+
 
 /*///////////// COMMUNITY PAGE //////////////*/
 div.containerALL {

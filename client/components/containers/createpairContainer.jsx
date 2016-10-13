@@ -28,7 +28,7 @@ class CreatePairContainer extends React.Component {
 
   componentDidUpdate() {
     console.log('inside component did update');
-    console.log(this.props.pairPic1);
+    // console.log(this.props.pairPic1);
   }
 
   appendPhoto(pic) {
@@ -100,16 +100,21 @@ class CreatePairContainer extends React.Component {
         pair1: pic1.id,
         pair2: pic2.id
       };
-      console.log('Pairs>>>>>>>>', config);
       axios.post('/createPair', config).then(res => {
         console.log('Successfully created pair:', res);
         this.props.dispatch({
-          type: 'GET_PAIRS',
-          pic1: pic1,
-          pic2: pic2,
+          type: 'GET_PAIR',
+          pic1: res.data.pair1,
+          pic2: res.data.pair2,
           mapURL: mapURL,
           theme: res.data.theme
         });
+        let data = {
+          pic1: res.data.pair1.id,
+          pic2: res.data.pair2.id,
+          theme: res.data.theme
+        };
+        console.log('Pairs | createpair>>>>>>>>', data);
         //route to pairview page
         this.context.router.push('/pairview');
       }).catch(err => { 
@@ -133,7 +138,8 @@ const mapStateToProps = function(store) {
     imgStack: store.imgState.imgStack,
     pairPic1: store.imgState.pairPic1,
     pairPic2: store.imgState.pairPic2,
-    imgTheme: store.imgState.imgTheme
+    imgTheme: store.imgState.pairTheme
+    // imgTheme: store.imgState.imgTheme
   };
 };
 

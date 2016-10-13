@@ -101,9 +101,8 @@ class CommunityContainer extends React.Component {
       pair1: pic1.id,
       pair2: pic2.id
     };
-    console.log('Pairs>>>>>>>>', config);
     axios.post('/createPair', config).then(res => {
-      console.log('Successfully created pair:', res);
+      console.log('Successfully retrieved pair:', res);
       this.props.dispatch({
         type: 'GET_PAIR',
         pic1: pic1,
@@ -111,10 +110,16 @@ class CommunityContainer extends React.Component {
         mapURL: mapURL,
         theme: theme
       });
+      let data = {
+        pic1: pic1.id,
+        pic2: pic2.id,
+        theme: theme
+      };
+      console.log('Pairs | community>>>>>>>>', data);
       //route to pairview page
       this.context.router.push('/pairview');
     }).catch(err => { 
-      console.err('Error creating pair:', err);
+      console.err('Error retrieving pair:', err);
     });
 
     // let config = {

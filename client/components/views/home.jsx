@@ -32,7 +32,7 @@ export default function(props) {
 
   return (
       <div>
-        <h1>Welcome {name}</h1>
+        <h1>Welcome hello {name}</h1>
           { photoElements }
       </div>
   );

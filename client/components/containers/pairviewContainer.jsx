@@ -19,6 +19,9 @@ class PairViewContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.props.dispatch({
+      type: 'RESET_PIC_PAIR'
+    });
   }
 
   componentWillMount() {
