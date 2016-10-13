@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./wait-for-it.sh db:5432 -t 10 && nodemon server/",
+    "start": "./wait-for-it.sh db:5432 -t 10 && forever server/",
     "babel": "babel",
     "webpack": "webpack"
   },
@@ -27,6 +27,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
+    "forever": "^0.15.2",
     "form-data": "^2.1.0",
     "jquery": "^3.1.1",
     "morgan": "^1.7.0",
