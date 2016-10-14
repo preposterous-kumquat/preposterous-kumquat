@@ -18,21 +18,18 @@ export default function(props) {
     //     <span className='picContainer' style={{ backgroundImage: `url('${ file_url }')`}}></span>
     //   ));
     : <div className='homeContainer'>
-      {userPhotos.map(({file_url, id, Theme}, i) => (
-        // <span className='picContainer' style={{ backgroundImage: `url('${ file_url }')`}} key={i}></span>
-        <span className='pcContainer' key={i}>
+        {userPhotos.map(({file_url, id, Theme}, i) => (
           <span className='picContainer' onClick={(e) => { getStack(id, Theme.theme); }}
-            style={{ backgroundImage: `url('${ file_url }')`}} >
+            style={{ backgroundImage: `url('${ file_url }')`}} key={i}>
           </span>
-        </span>
         ))}
       </div>;
 
   console.log('userPhotos>>>>', userPhotos);
 
   return (
-      <div>
-        <h1>Welcome hello {name}</h1>
+      <div className='containerMAIN'>
+        <h1 id='welcomeText' >Welcome {name}</h1>
           { photoElements }
       </div>
   );

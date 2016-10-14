@@ -22,9 +22,19 @@ class UploadContainer extends React.Component {
   }
 
   componentDidMount() {
-    $('.theme').on('click', function() {
-      $(this).addClass('selected');
-    });
+    //select upload button upon refresh
+    $('#uploadNAV').removeClass('text').addClass('pop off');
+
+    // $('.theme').on('click', function() {
+    //   $(this).addClass('selected');
+    // });
+  }
+
+  componentDidUpdate() {
+    // console.log('did update', !this.props.imgThumb);
+    // if (!this.props.imgThumb) {
+    //   alert('Sorry, photo is not valid.  Please select a different photo.');
+    // }
   }
 
   _handleSubmit(e) {
@@ -37,7 +47,8 @@ class UploadContainer extends React.Component {
     formData.append('photo', userPhoto);
     formData.append('theme', theme);
 
-    if (!this.props.file) {
+    // if (!this.props.file) {
+    if (!this.props.imgThumb) {
       alert('Please choose a file.');
     } else if (!theme) {
       alert('Please select a theme.');
@@ -48,6 +59,9 @@ class UploadContainer extends React.Component {
       this.context.router.push('/loading');
 
       //check for valid jpeg later...
+      // axios.post('/validPhoto', formData).then( res => {
+      //   console.log('Successfully checked for valid photo', res.data.valid);
+      //   if (res.data.valid === true) {
       axios.post('/upload', formData).then(res => {
         console.log('Successfully uploaded photo:', res);
 
@@ -86,6 +100,13 @@ class UploadContainer extends React.Component {
       }).catch(err => {
         console.log('Error uploading photo:', err);
       });
+        // } else {
+        //   alert('Sorry, photo is not valid.  Please select a different photo.');
+        // }
+
+      // }).catch(err => {
+      //   console.log('Error getting valid photo status:', err);
+      // });
     }
   }
 
@@ -121,48 +142,52 @@ class UploadContainer extends React.Component {
   render() {
     let { hasAuth, imgThumb, file } = this.props;
     let $imagePreview = null;
+    let background = '../../resources/images/upload1.png';
+
     if (imgThumb) {
       $imagePreview = (<img src={imgThumb} className='imgThumb' />);
     } else {
-      $imagePreview = (<div>Please select an Image for Preview</div>);
+      $imagePreview = (<div id='imgPreviewText'>Please select an Image for Preview</div>);
     }
+
     return (
-      <div>
-        <div id="loader-wrapper">
-          <div id="loader"></div>
-          <div className="loader-section section-left"></div>
-          <div className="loader-section section-right"></div>
-        </div>
+      <div className='uploading' style={{ backgroundImage: `url('${ background }')`}}>
 
-        <p>Select a theme:</p>  
-        <img className='theme' title='mealtime' src='../../resources/images/mealtime.png' onClick={(e) => this.selectTheme('mealtime', e.target)} />
-        <img className='theme' title='friendship' src='../../resources/images/friendship.png' onClick={(e) => this.selectTheme('friendship', e.target)} />
-        <img className='theme' title='celebration' src='../../resources/images/celebration.png' onClick={(e) => this.selectTheme('celebration', e.target)} />
-        <br />
-        <img className='theme' title='marriage' src='../../resources/images/marriage.png' onClick={(e) => this.selectTheme('marriage', e.target)} />
-        <img className='theme' title='family' src='../../resources/images/family.png' onClick={(e) => this.selectTheme('family', e.target)} />
-        <img className='theme' title='religion' src='../../resources/images/religion.png' onClick={(e) => this.selectTheme('religion', e.target)} />
+        <div className='enterForm upload'>
+          <p className='themeText' >Select a theme:</p>  
+          <div id='themeContainer'>
+            <img className='theme' title='mealtime' src='../../resources/images/mealtime.png' onClick={(e) => this.selectTheme('mealtime', e.target)} />
+            <img className='theme' title='friendship' src='../../resources/images/friendship.png' onClick={(e) => this.selectTheme('friendship', e.target)} />
+            <img className='theme' title='celebration' src='../../resources/images/celebration.png' onClick={(e) => this.selectTheme('celebration', e.target)} />
+            <br />
+            <img className='theme' title='marriage' src='../../resources/images/marriage.png' onClick={(e) => this.selectTheme('marriage', e.target)} />
+            <img className='theme' title='family' src='../../resources/images/family.png' onClick={(e) => this.selectTheme('family', e.target)} />
+            <img className='theme' title='religion' src='../../resources/images/religion.png' onClick={(e) => this.selectTheme('religion', e.target)} />
 
-        <br />
-        <img className='theme' title='parenthood' src='../../resources/images/parenthood.png' onClick={(e) => this.selectTheme('parenthood', e.target)} />
-        <img className='theme' title='adventure' src='../../resources/images/adventure.png' onClick={(e) => this.selectTheme('adventure', e.target)} />
-        <img className='theme' title='sports' src='../../resources/images/sports.png' onClick={(e) => this.selectTheme('sports', e.target)} />
-        <br />
+            <br />
+            <img className='theme' title='parenthood' src='../../resources/images/parenthood.png' onClick={(e) => this.selectTheme('parenthood', e.target)} />
+            <img className='theme' title='adventure' src='../../resources/images/adventure.png' onClick={(e) => this.selectTheme('adventure', e.target)} />
+            <img className='theme' title='sports' src='../../resources/images/sports.png' onClick={(e) => this.selectTheme('sports', e.target)} />
+            <br />
 
-        <img className='theme hide' title='love' src='../.../resources/images/love.png' onClick={(e) => this.selectTheme('love', e.target)} />
-        <img className='theme hide' title='babies' src='../../resources/images/baby.png' onClick={(e) => this.selectTheme('babies', e.target)} />
-        <img className='theme hide' title='ice cream' src='../../resources/images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
-        <img className='theme hide' title='cats' src='../../resources/images/cat.png' onClick={(e) => this.selectTheme('cats', e.target)} />
-        <img className='theme hide' title='nature' src='../../resources/images/nature.png' onClick={(e) => this.selectTheme('nature', e.target)} />
-        
-        <p id='theme'></p>
-        <br />
-        <form onSubmit={(e) => this._handleSubmit(e)}>
-          <input id='getFile' type='file' onChange={(e)=>this._handleImageChange(e)} /><br />
-          <button type='submit'>UPLOAD IMG</button>
-        </form>
-        <div>
-          {$imagePreview}
+            <img className='theme hide' title='love' src='../.../resources/images/love.png' onClick={(e) => this.selectTheme('love', e.target)} />
+            <img className='theme hide' title='babies' src='../../resources/images/baby.png' onClick={(e) => this.selectTheme('babies', e.target)} />
+            <img className='theme hide' title='ice cream' src='../../resources/images/ice-cream.png' onClick={(e) => this.selectTheme('ice_cream', e.target)} />
+            <img className='theme hide' title='cats' src='../../resources/images/cat.png' onClick={(e) => this.selectTheme('cats', e.target)} />
+            <img className='theme hide' title='nature' src='../../resources/images/nature.png' onClick={(e) => this.selectTheme('nature', e.target)} />
+          </div>
+          <p id='theme'></p>
+          <br />
+          <form id='uploadForm'onSubmit={(e) => this._handleSubmit(e)}>
+            <label id='uploadFile'>
+              <input id='getFile' type='file' onChange={(e)=>this._handleImageChange(e)} />
+              Choose File
+            </label>
+            <button className='submit upload' type='submit'>Upload Image</button>
+          </form>
+          <div>
+            {$imagePreview}
+          </div>
         </div>
       </div>
     );
@@ -192,3 +217,10 @@ export default connect(mapStateToProps)(UploadContainer);
         //   <input type='file' onChange={(e)=>this._handleImageChange(e)} /><br />
         //   <button type='submit' onClick={(e)=>this._handleSubmit(e)}>UPLOAD IMG</button>
         // </form>
+
+
+        // <div id="loader-wrapper">
+        //   <div id="loader"></div>
+        //   <div className="loader-section section-left"></div>
+        //   <div className="loader-section section-right"></div>
+        // </div>

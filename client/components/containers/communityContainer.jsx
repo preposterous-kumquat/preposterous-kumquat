@@ -20,12 +20,12 @@ class CommunityContainer extends React.Component {
     };
   }
 
-  // componentDidUpdate() {
-  componentWillMount() {
-    // clearInterval(this.props.imgSlideshow);
-    // send to loading page...
-    //this.context.router.push('/loading');
+  componentDidMount() {
+    //select community button upon refresh
+    $('#communityNAV').removeClass('text').addClass('pop off');
+  }
 
+  componentWillMount() {
     // send get request to get all pairs
     axios.get('/getPairs').then(res => {
       console.log('Successfully retrieved pairs:', res);
@@ -39,17 +39,6 @@ class CommunityContainer extends React.Component {
     }).catch(err => {
       console.error('Error getting pair:', err);
     });
-    // axios.get('/photos').then(res => {
-    //   console.log('Successfully retrieved photos:', res);
-    //   // dispatch to update user photos
-
-    //   this.props.dispatch({
-    //     type: 'USER_PHOTOS',
-    //     userPhotos: res.data
-    //   });
-    // }).catch(err => {
-    //   console.error('Error getting photos:', err);
-    // });
   }
 
   makeMapURL(pic1, pic2) {
@@ -60,7 +49,7 @@ class CommunityContainer extends React.Component {
     console.log('pair PIC 2 >>>', pic2);
     let marker = {
       c1: '0xFF3C80',
-      c2: '0xFFFB00',
+      c2: '0x34bf49',
       m1: pic1.lat === undefined ? defaultLoc : Number(pic1.lat).toFixed(6) + ',' + Number(pic1.long).toFixed(6),
       m2: pic2.lat === undefined ? defaultLoc : Number(pic2.lat).toFixed(6) + ',' + Number(pic2.long).toFixed(6)
     };
@@ -121,83 +110,58 @@ class CommunityContainer extends React.Component {
     }).catch(err => { 
       console.err('Error retrieving pair:', err);
     });
-
-    // let config = {
-    //   id: id,
-    //   theme: theme
-    // };
-    // console.log('inside getStack, config>>>>', config);
-    // // redirect to loading page...
-    // this.context.router.push('/loading');
-    // axios.get('/stack', {params: config}).then(res => {
-    //   console.log('Successfully retrieved stack:', res);
-    //   let stack = [];
-    //   for (var key in res.data) {
-    //     stack.push(res.data[key]);
-    //   }
-    //   console.log('(homeContainer)stack>>>>', stack);
-    //   //send stack over
-    //   this.props.dispatch({
-    //     type: 'IMG_STACK',
-    //     imgStack: stack
-    //   });
-
-    //   // redirect to carousel page...
-    //   this.context.router.push('/createPair');
-    // }).catch(err => {
-    //   console.error('Error getting stack:', err);
-    // });
   }
+
   render() {
     // let firstName = this.props.name.split(' ')[0];
-    let sampleData = [{
-      pair1: {
-        file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/007/000000000007.jpg",
-        id: 7,
-        lat: 19.725342248062,
-        long: -155.0390625
-      }, 
-      pair2: {
-        file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/006/000000000006.jpg",
-        id: 6,
-        lat: 51.8357775204529,
-        long: 11.77734375
-      }, 
-      theme: "friendship"
-    }, {
-      pair1: {
-        file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/002/000000000002.jpg",
-        id: 2,
-        lat: 40.7139558263137,
-        long: -74.53125
-      }, 
-      pair2: {
-        file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/001/000000000001.jpg",
-        id: 1,
-        lat: 34.9579953108503,
-        long: 135.52734375
-      }, 
-      theme: "mealtime"
-    }, {
-      pair1: {
-        file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/002/000000000002.jpg",
-        id: 2,
-        lat: 40.7139558263137,
-        long: -74.53125
-      }, 
-      pair2: {
-        file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/001/000000000001.jpg",
-        id: 1,
-        lat: 34.9579953108503,
-        long: 135.52734375
-      }, 
-      theme: "mealtime"
-    }];
+    // let sampleData = [{
+    //   pair1: {
+    //     file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/007/000000000007.jpg",
+    //     id: 7,
+    //     lat: 19.725342248062,
+    //     long: -155.0390625
+    //   }, 
+    //   pair2: {
+    //     file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/006/000000000006.jpg",
+    //     id: 6,
+    //     lat: 51.8357775204529,
+    //     long: 11.77734375
+    //   }, 
+    //   theme: "friendship"
+    // }, {
+    //   pair1: {
+    //     file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/002/000000000002.jpg",
+    //     id: 2,
+    //     lat: 40.7139558263137,
+    //     long: -74.53125
+    //   }, 
+    //   pair2: {
+    //     file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/001/000000000001.jpg",
+    //     id: 1,
+    //     lat: 34.9579953108503,
+    //     long: 135.52734375
+    //   }, 
+    //   theme: "mealtime"
+    // }, {
+    //   pair1: {
+    //     file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/002/000000000002.jpg",
+    //     id: 2,
+    //     lat: 40.7139558263137,
+    //     long: -74.53125
+    //   }, 
+    //   pair2: {
+    //     file_url: "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/001/000000000001.jpg",
+    //     id: 1,
+    //     lat: 34.9579953108503,
+    //     long: 135.52734375
+    //   }, 
+    //   theme: "mealtime"
+    // }];
     let pic = "https://s3-us-west-2.amazonaws.com/preposterous-kumquat.photos/000/000/000/001/000000000001.jpg";
     let theme = 'friendship';
     let themeURL = '../../resources/images/' + theme + '.png';
     return (
-      <CommunityView { ...this.props } sampleData={sampleData} getPair={this.getPair}/>
+      <CommunityView { ...this.props } getPair={this.getPair}/>
     );
   }
 

@@ -5,6 +5,13 @@ import { Link } from 'react-router';
 export default props => {
 
   return (
-    <center><h3>loading...</h3><div className="loader"></div></center>
+    <center>
+      <div className='containerMAIN'>
+        <div className='loadingContainer'>
+          <h3>loading...</h3>
+          <div className="loader"></div>
+        </div>
+      </div>
+    </center>
   );
 };

@@ -22,7 +22,6 @@ class HomeContainer extends React.Component {
 
   // componentDidUpdate() {
   componentWillMount() {
-    // clearInterval(this.props.imgSlideshow);
     axios.get('/photos').then(res => {
       console.log('Successfully retrieved photos:', res);
       // dispatch to update user photos
@@ -33,6 +32,11 @@ class HomeContainer extends React.Component {
     }).catch(err => {
       console.error('Error getting photos:', err);
     });
+  }
+
+  componentDidMount() {
+    //select home button upon refresh
+    $('#homeNAV').removeClass('text').addClass('pop off');
   }
 
   getStack(id, theme) {

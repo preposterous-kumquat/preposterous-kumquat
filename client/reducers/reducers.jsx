@@ -18,7 +18,8 @@ const userInitState = restoreDefault('user', {
   auth: false,
   name: '',
   email: '',
-  userPhotos: []
+  userPhotos: [],
+  onLandingPage: false
 });
 
 const imgInitState = restoreDefault('img', {
@@ -34,7 +35,8 @@ const imgInitState = restoreDefault('img', {
   allPairs: [],
   imgFeature: '',
   imgSlideshow: '',
-  imgTheme: ''
+  imgTheme: '',
+  logoURL: '../../resources/images/LensityLogo.png'
 });
 
 // The User Reducer
@@ -52,6 +54,12 @@ const userReducer = function(state = userInitState, action) {
     case 'USER_PHOTOS':
       state = { ...state, userPhotos: action.userPhotos };
       break;
+    case 'VISIT_LANDING':
+      state = { ...state, onLandingPage: true };
+      break;
+    case 'LEAVE_LANDING':
+      state = { ...state, onLandingPage: false };
+      break;
   }
 
   persist('user', JSON.stringify(state));
@@ -68,6 +76,9 @@ const imgReducer = function(state = imgInitState, action) {
       break;
     case 'IMG_THUMB':
       state = { ...state, imgThumb: action.imgThumb };
+      break;
+    case 'RESET_PREVIEW':
+      state = { ...state, imgThumb: '' };
       break;
     case 'IMG_STACK':
       state = { ...state, imgStack: action.imgStack };
@@ -101,6 +112,12 @@ const imgReducer = function(state = imgInitState, action) {
       break;
     case 'IMG_THEME':
       state = { ...state, imgTheme: action.theme };
+      break;
+    case 'LOGO_ON':
+      state = { ...state, logoURL: '../../resources/images/logoON.png' };
+      break;
+    case 'LOGO_OFF':
+      state = { ...state, logoURL: '../../resources/images/LensityLogo.png' };
       break;
   }
   persist('img', JSON.stringify(state));

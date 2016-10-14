@@ -20,6 +20,10 @@ class CreatePairContainer extends React.Component {
   }
 
   componentDidMount() {
+    $('#homeNAV').removeClass('pop off').addClass('text');
+    $('#uploadNAV').removeClass('pop off').addClass('text');
+    $('#communityNAV').removeClass('pop off').addClass('text');
+    // $(page).removeClass('text').addClass('pop off');
   }
 
   componentWillMount() {
@@ -58,7 +62,8 @@ class CreatePairContainer extends React.Component {
     console.log('pair PIC 2 >>>', pic2);
     let marker = {
       c1: '0xFF3C80',
-      c2: '0xFFFB00',
+      // c2: '0xFFFB00',
+      c2: '0x34bf49',
       m1: pic1.lat === undefined ? defaultLoc : Number(pic1.lat).toFixed(6) + ',' + Number(pic1.long).toFixed(6),
       m2: pic2.lat === undefined ? defaultLoc : Number(pic2.lat).toFixed(6) + ',' + Number(pic2.long).toFixed(6)
     };
@@ -92,8 +97,10 @@ class CreatePairContainer extends React.Component {
     return googleMap;
   }
 
-  createPair(pic1, pic2) {
+  createPair(pic1, pic2, map) {
     let mapURL = this.makeMapURL(pic1, pic2);
+    console.log('new map>>>>', mapURL);
+    console.log('old map>>>>', map);
     if (pic1.url && pic2.url) {
       this.context.router.push('/loading');
       const config = {
@@ -104,14 +111,16 @@ class CreatePairContainer extends React.Component {
         console.log('Successfully created pair:', res);
         this.props.dispatch({
           type: 'GET_PAIR',
-          pic1: res.data.pair1,
-          pic2: res.data.pair2,
+          // pic1: res.data.pair1,
+          // pic2: res.data.pair2,
+          pic1: pic1,
+          pic2: pic2,
           mapURL: mapURL,
           theme: res.data.theme
         });
         let data = {
-          pic1: res.data.pair1.id,
-          pic2: res.data.pair2.id,
+          pic1: pic1.id,
+          pic2: pic2.id,
           theme: res.data.theme
         };
         console.log('Pairs | createpair>>>>>>>>', data);

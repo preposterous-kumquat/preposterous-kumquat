@@ -47,7 +47,8 @@ class SigninContainer extends React.Component {
             name: res.data.full_name,
             email: res.data.email
           });
-
+          //select home button upon login
+          $('#homeNAV').removeClass('text').addClass('pop off');
           this.context.router.push('/home');
           // this.context.router.push('/carousel');
         }).catch(err => {
