@@ -97,8 +97,10 @@ class CreatePairContainer extends React.Component {
     return googleMap;
   }
 
-  createPair(pic1, pic2) {
+  createPair(pic1, pic2, map) {
     let mapURL = this.makeMapURL(pic1, pic2);
+    console.log('new map>>>>', mapURL);
+    console.log('old map>>>>', map);
     if (pic1.url && pic2.url) {
       this.context.router.push('/loading');
       const config = {
@@ -109,14 +111,16 @@ class CreatePairContainer extends React.Component {
         console.log('Successfully created pair:', res);
         this.props.dispatch({
           type: 'GET_PAIR',
-          pic1: res.data.pair1,
-          pic2: res.data.pair2,
+          // pic1: res.data.pair1,
+          // pic2: res.data.pair2,
+          pic1: pic1,
+          pic2: pic2,
           mapURL: mapURL,
           theme: res.data.theme
         });
         let data = {
-          pic1: res.data.pair1.id,
-          pic2: res.data.pair2.id,
+          pic1: pic1.id,
+          pic2: pic2.id,
           theme: res.data.theme
         };
         console.log('Pairs | createpair>>>>>>>>', data);

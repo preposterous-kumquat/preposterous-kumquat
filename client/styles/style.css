@@ -589,6 +589,7 @@ div.containerMAIN {
 div.containerALL {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 div.containerPAIR {
@@ -664,6 +665,12 @@ img.carouselTHEME {
 	height: 50px;
 }
 
+/*////////// LOADING //////////*/
+.loadingContainer {
+	margin-top: 30px;
+	margin-bottom: 50px;
+	height: 700px;
+}
 
 /*/////////// MAKE FILM STRIP //////////////*/
 /*span.picContainer {

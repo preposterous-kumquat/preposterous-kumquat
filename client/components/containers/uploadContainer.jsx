@@ -30,6 +30,13 @@ class UploadContainer extends React.Component {
     // });
   }
 
+  componentDidUpdate() {
+    // console.log('did update', !this.props.imgThumb);
+    // if (!this.props.imgThumb) {
+    //   alert('Sorry, photo is not valid.  Please select a different photo.');
+    // }
+  }
+
   _handleSubmit(e) {
     e.preventDefault();
     var formData = new FormData();
@@ -52,6 +59,9 @@ class UploadContainer extends React.Component {
       this.context.router.push('/loading');
 
       //check for valid jpeg later...
+      // axios.post('/validPhoto', formData).then( res => {
+      //   console.log('Successfully checked for valid photo', res.data.valid);
+      //   if (res.data.valid === true) {
       axios.post('/upload', formData).then(res => {
         console.log('Successfully uploaded photo:', res);
 
@@ -90,6 +100,13 @@ class UploadContainer extends React.Component {
       }).catch(err => {
         console.log('Error uploading photo:', err);
       });
+        // } else {
+        //   alert('Sorry, photo is not valid.  Please select a different photo.');
+        // }
+
+      // }).catch(err => {
+      //   console.log('Error getting valid photo status:', err);
+      // });
     }
   }
 

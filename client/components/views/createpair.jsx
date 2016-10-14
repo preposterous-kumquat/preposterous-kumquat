@@ -19,7 +19,7 @@ export default function(props) {
   return (
     <div className='allContent containerMAIN'>
       <div className='filmStrip'>
-        <span onClick={(e) => createPair(pairPic1, pairPic2)} >
+        <span onClick={(e) => createPair(pairPic1, pairPic2, googleMap)} >
           <button className='pairButtonCP'>Create Photo Pairing</button>
         </span>
         {stack.map((pic, i) => (

@@ -49,7 +49,7 @@ class CommunityContainer extends React.Component {
     console.log('pair PIC 2 >>>', pic2);
     let marker = {
       c1: '0xFF3C80',
-      c2: '0xFFFB00',
+      c2: '0x34bf49',
       m1: pic1.lat === undefined ? defaultLoc : Number(pic1.lat).toFixed(6) + ',' + Number(pic1.long).toFixed(6),
       m2: pic2.lat === undefined ? defaultLoc : Number(pic2.lat).toFixed(6) + ',' + Number(pic2.long).toFixed(6)
     };
