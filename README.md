@@ -20,8 +20,10 @@ Finding connection with a human lens
     1. [Installing Dependencies](#installing-dependencies)
     1. [Compile React](#compile-react)
     1. [Seed Database Data](#seed-database-data)
+    1. [Train Data](#train-data)
 1. [Team](#team)
 1. [Contributing](#contributing)
+
 
 ## Micro-Services
   - 
@@ -115,6 +117,13 @@ email: kumquat@gmail.com
 pw: 123
 * If pushing to redis server, uncomment out the redis line. Note* this has not been tested.
 
+### Train Data
+- Upload training photos to S3
+ * naming convention: http://url.com/path/to/photo/im1342.jpg... im1343.jpg... im1344.jpg
+- In curator/routes.js -> set training counter to first image file number (line 16)
+- Uncomment volume to trainingCorpus.json in yml file
+- Send POST request to main-web-server/kickoffTraining with postman
+- Copy and paste data in trainingCorpus.json in curator to trainingCorpus.json in simserver
 
 ## Contributing
 
