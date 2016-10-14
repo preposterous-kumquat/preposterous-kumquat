@@ -13,7 +13,6 @@ export default function(props) {
   return (
     <div className='carouselALL'>
       <div className='carouselMINI'>
-        <span><img className='carouselTHEME' src={themeURL} /></span>
         {stack.map((pic, i) => (
           <span className='miniPIC' key={i}
             style={{ backgroundImage: `url('${ pic.url }')`}}
@@ -32,7 +31,26 @@ export default function(props) {
   );
 }
 
-
+  // return (
+  //   <div className='carouselALL'>
+  //     <div className='carouselMINI'>
+  //       <span><img className='carouselTHEME' src={themeURL} /></span>
+  //       {stack.map((pic, i) => (
+  //         <span className='miniPIC' key={i}
+  //           style={{ backgroundImage: `url('${ pic.url }')`}}
+  //           onMouseEnter={(e) => featurePhoto(pic)}
+  //           onMouseLeave={(e) => startSlideshow(i)} >
+  //         </span>
+  //       ))}
+  //     </div>
+  //     <div className='carouselFEATURE'>
+  //       <img src={imgFeature}/>
+  //     </div>
+  //     <div>
+  //       <button className='pairButton' onClick={(e) => gotoCreatePair()}>Create a photo pair!</button>
+  //     </div>
+  //   </div>
+  // );
 
 
 

@@ -38,7 +38,8 @@ class SignupContainer extends React.Component {
           name: res.data.full_name,
           email: res.data.email
         });
-
+        //select home button upon login
+        $('#homeNAV').removeClass('text').addClass('pop off');
         this.context.router.push('/home');
       }).catch(err => {
         console.error('Error getting user details:', err);

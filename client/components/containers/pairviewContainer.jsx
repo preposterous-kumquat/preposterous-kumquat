@@ -22,6 +22,9 @@ class PairViewContainer extends React.Component {
     this.props.dispatch({
       type: 'RESET_PIC_PAIR'
     });
+    $('#homeNAV').removeClass('pop off').addClass('text');
+    $('#uploadNAV').removeClass('pop off').addClass('text');
+    $('#communityNAV').removeClass('pop off').addClass('text');
   }
 
   componentWillMount() {

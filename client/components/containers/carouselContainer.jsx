@@ -28,6 +28,12 @@ class CarouselContainer extends React.Component {
     this.startSlideshow(i);
   }
 
+  componentDidMount() {
+    $('#homeNAV').removeClass('pop off').addClass('text');
+    $('#uploadNAV').removeClass('pop off').addClass('text');
+    $('#communityNAV').removeClass('pop off').addClass('text');
+  }
+
   componentDidUpdate() {
     console.log('inside component did update');
     // console.log(this.props.pairPic1);
