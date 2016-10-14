@@ -41,7 +41,8 @@ services:
     # environment:
     #   NODE_ENV: PROD
     volumes:
-      - ../curator/config:/usr/src/app/config
+      - ../curator/trainingCorpus.json:/usr/src/app/trainingCorpus.json
+    #   - ../curator/config:/usr/src/app/config
   redis:
     image: redis
     ports:

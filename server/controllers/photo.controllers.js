@@ -27,11 +27,11 @@ module.exports = {
 function train (req, res) {
   let counter = 1;
   let automate = function() {
-    let config = {
+    let reqconfig = {
       method: 'POST',
       uri: `${config.curator}/getTrainingData`
     }
-    request(config, (err, response, body) => {
+    request(reqconfig, (err, response, body) => {
       if (err) {
         console.log(err);
       } else {
