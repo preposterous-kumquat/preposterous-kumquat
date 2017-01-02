@@ -279,7 +279,7 @@ function createPair(req, res) {
 
 function getPairs(req, res) {
   models.Pairs.findAll({
-    limit: 5,
+    limit: 10,
     order: '"createdAt" DESC'
   }).then((result) => {
     let recentPairs = [];
