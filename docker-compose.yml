@@ -1,9 +1,9 @@
 version: '2'
 services:
   main:
-    image: app
+    image: bkilrain/app:latest
     ports:
-      - "3000:3000"
+      - "80:3000"
     links:
       - db
       - photo-processor
@@ -14,10 +14,11 @@ services:
       CURATOR: curator:3002
     depends_on:
       - "db"
-    volumes:
-      - ./client/bundle.js:/usr/src/app/client/bundle.js
-      - ./client:/usr/src/app/client
-      - ./server:/usr/src/app/server
+    # uncomment for easy development
+    # volumes:
+    #   - ./client/bundle.js:/usr/src/app/client/bundle.js
+    #   - ./client:/usr/src/app/client
+    #   - ./server:/usr/src/app/server
   db:
     image: postgres
     ports:
@@ -27,11 +28,11 @@ services:
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: app
   photo-processor: 
-    image: photo-processor:0.1
+    image: bkilrain/photo-processor:latest
     expose:
       - "3001"
   curator:
-    image: curator:0.1
+    image: bkilrain/curator:latest
     expose:
       - "3002"
     depends_on:
@@ -40,14 +41,16 @@ services:
     # environment:
     #   NODE_ENV: PROD
     volumes:
-      - ../curator/config:/usr/src/app/config
+      - ../curator/trainingCorpus.json:/usr/src/app/trainingCorpus.json
+    #   - ../curator/config:/usr/src/app/config
   redis:
     image: redis
+    ports:
+      - "6379:6379"
   simserver:
-    image: simserver:0.1
+    image: bkilrain/simserver:latest
     ports: 
     - "5000:5000"
-
 
 
 

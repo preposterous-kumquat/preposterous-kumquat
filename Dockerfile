@@ -6,8 +6,9 @@ RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.1.0.tar.gz
 
 ADD package.json package.json
 RUN npm install 
-RUN npm install nodemon -g 
+RUN npm install forever -g 
 RUN npm install webpack -g
+RUN npm install --only=dev
 ADD . .
 RUN chmod +x ./wait-for-it.sh
 RUN webpack

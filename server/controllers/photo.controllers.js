@@ -27,11 +27,11 @@ module.exports = {
 function train (req, res) {
   let counter = 1;
   let automate = function() {
-    let config = {
+    let reqconfig = {
       method: 'POST',
       uri: `${config.curator}/getTrainingData`
     }
-    request(config, (err, response, body) => {
+    request(reqconfig, (err, response, body) => {
       if (err) {
         console.log(err);
       } else {
@@ -279,7 +279,7 @@ function createPair(req, res) {
 
 function getPairs(req, res) {
   models.Pairs.findAll({
-    limit: 5,
+    limit: 10,
     order: '"createdAt" DESC'
   }).then((result) => {
     let recentPairs = [];
